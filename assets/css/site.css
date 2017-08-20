@@ -106,6 +106,7 @@ li.sub-section-text {
 	border-bottom: 1px solid #ccc;
 	background: #fff;
 	border-left: 1px solid #ccc;
+	z-index: 5;
 }
 
 #doc-page-container {

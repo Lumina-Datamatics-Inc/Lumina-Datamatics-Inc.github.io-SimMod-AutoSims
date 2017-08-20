@@ -1,1 +1,217 @@
-<h1>Development Environment</h1>
+<div class="page-text">
+	SimMod runs in a Node.js environment. If you are familiar with setting up and running node, then you can skip this section. If you are new to node, we will guide you through the process of getting your development environment setup.
+	<br /><br />
+	In this section, you will learn about the tools required and steps to setup development environment to develop a Node.js application.
+	<br /><br />
+	Node.js development environment can be setup in Windows, Mac and Linux. The following tools/SDK are required for developing a Node.js application on any platform.
+
+	<ol>
+		<li>Node.js</li>
+		<li>Node Package Manager (NPM)</li>
+		<li>IDE (Integrated Development Environment) or TextEditor</li>
+	</ol>
+
+	<br />
+
+	<!-- TABS -->
+	<div id="tab-container">
+		<div id="tab-mac" class="tab active" data-tab="content-mac">Mac OSX</div>
+		<div id="tab-win" class="tab" data-tab="content-win">Windows</div>
+	</div>
+	<!-- MAC OSX -->
+	<div id="content-mac" class="tab-content">
+		Visit Node.js official web site <a href="https://nodejs.org" target="_blank">https://nodejs.org</a>. It will automatically detect OS and display download link as per your Operating System. For example, it will display the following download link for 64 bit Mac OSX.
+		<br /><br />
+		<img class="center" src="assets/img/nodejs-download-mac.png" />
+		<br /><br />
+		Download the node-v*.pkg installer for Node.js by clicking on "Download for OS X" link. Click on the .pkg installer to start the Node.js installation wizard.
+		<br /><br />
+		<img class="center" src="assets/img/nodejs-installation-mac.png" />
+		<br /><br />
+		Click on Continue and follow the steps. After successful installation, it will display summary of installation about the location where it installed Node.js and NPM.
+		<br /><br />
+		<img class="center" src="assets/img/nodejs-installation-mac2.png" />
+		<br /><br />
+		After installation, verify the Node.js installation using terminal window and enter the following command. It will display the version number of Node.js installed on your Mac.
+		<br />
+		<div class="terminal-block">
+			$ node --version
+		</div>
+		<br />
+		Now verify that you are running version 8.1.2, which is the version SimMod runs on.
+		<br />
+		<div class="terminal-block">
+			$ node --version
+			<br />
+			v8.1.2
+		</div>
+		<br />
+		Now, verify the version of NPM. Enter the following command. It will display the version number of NPM.
+		<br />
+		<div class="terminal-block">
+			$ npm --version
+		</div>
+		<br />
+		SimMod runs on version 5.0.3
+		<div class="terminal-block">
+			$ npm --version
+			<br />
+			v5.0.3
+		</div>
+
+		<br /><br />
+		<span class="page-text-heading">IDE:</span>
+		<br />
+		<div class="hline" />
+		<br />
+		Node.js application uses JavaScript to develop an application. So, you can use any IDE or text editor tool that supports JavaScript syntax. However, an IDE that supports auto complete features for Node.js API is recommended e.g. Atom, Sublime text, WebStorm etc.
+		<br /><br />
+		Learn how to setup Atom for Node.js development in the <em>Recommended Tools</em> section.
+	</div>
+	<!-- WINDOWS OS -->
+	<div id="content-win" class="tab-content hidden">
+		Visit Node.js official web site <a href="https://nodejs.org" target="_blank">https://nodejs.org</a>. It will automatically detect OS and display download link as per your Operating System. For example, it will display the following download link for 64 bit Windows OS.
+		<br /><br />
+		<img class="center" src="assets/img/nodejs-download-win.png" />
+		<br /><br />
+		Download node MSI for windows by clicking on Download for Windows link.
+		<br /><br />
+		After you download the MSI, double-click on it to start the installation as shown below.
+		<br /><br />
+		<img class="center" src="assets/img/nodejs-installation-win.png" />
+		<br /><br />
+		Click Next to read and accept the License Agreement and then click Install. It will install Node.js quickly on your computer. Finally, click finish to complete the installation.
+		<br /><br />
+		After installation, verify the Node.js installation using the command prompt and enter the following command. It will display the version number of Node.js installed on your PC.
+		<br />
+		<div class="terminal-block">
+			$ node --version
+		</div>
+		<br />
+		Now verify that you are running version 8.1.2, which is the version SimMod runs on.
+		<br />
+		<div class="terminal-block">
+			$ node --version
+			<br />
+			v8.1.2
+		</div>
+		<br />
+		Now, verify the version of NPM. Enter the following command. It will display the version number of NPM.
+		<br />
+		<div class="terminal-block">
+			$ npm --version
+		</div>
+		<br />
+		SimMod runs on version 5.0.3
+		<div class="terminal-block">
+			$ npm --version
+			<br />
+			v5.0.3
+		</div>
+
+		<br /><br />
+		<span class="page-text-heading">IDE:</span>
+		<br />
+		<div class="hline" />
+		<br />
+		Node.js application uses JavaScript to develop an application. So, you can use any IDE or text editor tool that supports JavaScript syntax. However, an IDE that supports auto complete features for Node.js API is recommended e.g. Atom, Sublime text, WebStorm etc.
+		<br /><br />
+		Learn how to setup Atom for Node.js development in the <em>Recommended Tools</em> section.
+	</div>
+</div>
+
+<script>
+	$('.tab').on('click', function() {
+		// Remove active class from tabs
+    	$(document).find('.tab').removeClass('active')
+    	// Set this tab active
+    	$(this).addClass('active')
+		
+		// Get tab content
+		var content = $(this).attr('data-tab')
+		// Hide all content
+    	$(document).find('.tab-content').addClass('hidden')
+		// Show the content for this tab
+		$('#' + content + '.tab-content').removeClass('hidden')
+	})
+</script>
+
+<style scoped="scoped">
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.hidden {
+	display: none;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+
+#tab-container {
+	position: absolute;
+	max-width: 800px;
+}
+
+.tab {
+	padding-top: 4px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 2px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border: 1px solid #ccc;
+	background-color: #ccc;
+	float: left;
+	z-index: 2;
+	position: relative;
+	cursor: pointer;
+}
+
+.tab.active {
+	border-bottom: 1px solid #fff;
+	background-color: #fff;
+	cursor: default;
+	z-index: 2;
+}
+
+.tab-content {
+	position: relative;
+	max-width: 800px;
+	min-height: 400px;
+	border: 1px solid #ccc;
+	margin-top: 27px;
+	padding: 15px;
+	z-index: 1;
+}
+
+.terminal-block {
+	position: relative;
+	max-width: 800px;
+	border: 3px solid #ccc;
+	background-color: #000;
+	color: #43f70c;
+	padding: 10px;
+}
+</style>
