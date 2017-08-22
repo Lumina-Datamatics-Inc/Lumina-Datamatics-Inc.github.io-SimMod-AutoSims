@@ -24,22 +24,78 @@
 	<strong>Home Page</strong>
 	<br />
 	The Home Page includes the Series Title, Module Title and 3 buttons. The titles are automatically added to the page from the
-	module_data.json file. The first button "Using the Simulation" will be the same for all modules, clicking it will load the
+	module-data.json file. The first button "Using the Simulation" will be the same for all modules, clicking it will load the
 	Video Page with the corresponding video. 
 	<br /><br />
 	The second button will vary based on the type of module (Understanding the Concepts or Understanding the Equipment), clicking on this button will also load the Video Page with its corresponding video. 
 	<br /><br />
 	The third button "Enter Simulation" will also be the same for all modules, clicking it will load the Simulations section.
-
-
 	<br /><br />
-	There are 2 types of modules: Understanding the Concepts & Understanding the Equipment. 
+	<img class="center" src="assets/img/home_page.png" style="max-width: 600px; height: auto;" />
+	<br /><br /><br />
+	
+	<strong>Video Page</strong>
+	<br />
+	The Video Page includes a page header with Series Title, Activity Tile, Cengage Logo, an embedded video player and 3 buttons. 
+	All videos are automatically setup and configured by SimCore, so you will not have to do anything to setup this page.
 	<br /><br />
-	<span class="page-text-heading">Understanding the Concepts:</span>
+	The titles are handled by SimCore, and are populated from the module-data.json file.
+	<br /><br />
+	The first button displayed will either be "Understanding the Concepts" or "Understanding the Equipment" based on the module type.
+	Clicking the button will load the corresponding video and will change the button back to "Using the Simulation".
+	<br /><br />
+	The second button is the Home button for all modules and returns you to the Home Page.
+	<br /><br />
+	The third button "Enter Simulation" will also be the same for all modules, clicking it will load the Simulations section.
+	<br /><br />
+	<img class="center" src="assets/img/video_page.png" style="max-width: 600px; height: auto;" />
+	<br /><br /><br />
+
+	<strong>Simulations</strong>
 	<br />
-	These modules provide activities that focus on teaching the students conceptual ideas about a subject. The activities you
-	will be building will typically involve interactive diagrams and matching terms to their definitions.
+	The Simulation Pages are where you will focus most of your attention. Simulations are broken down into Activities. Activities consist
+	of a sequence of Tasks that a student will perform. Some activities may have only a few tasks and others may consist of a large
+	number of tasks. To make development easier, activities can be separated into individual view files. It will be up to the individual
+	developer to decide how to breakup the activities into views.
+	<br /><br />
+	The Simulation pages include a page header, just like on the Video Page. There is also an IconBar, Activity Area (Full & Box Mode),
+	Closed Caption Bar and Score Box.
+	<br /><br />
+	<img class="center" src="assets/img/simulations_page.png" style="max-width: 600px; height: auto;" />
 	<br />
+	<img class="center" src="assets/img/simulations_page_box.png" style="max-width: 600px; height: auto;" />
+	<br /><br />
+	We will go into further detail about these topics later in this section.
+	<br /><br /><br />
+
+	<strong>Review Questions</strong>
+	<br />
+	When a student completes all of the activities, they will be presented with a set of Review Questions. Over the course of building
+	numerous modules we discovered that the layout for review questions can very. So we designed it so that building review questions 
+	will be very easy for developers. All of the scoring and checking answers is handled by SimCore, so as a developer all you need to 
+	do is pass in the question and answer data from a data file, and layout the page using our custom layout components.
+	<br /><br />
+	<img class="center" src="assets/img/review_questions_page.png" style="max-width: 600px; height: auto;" />
+	<br /><br /><br />
+
+	<strong>Score Card</strong>
+	<br />
+	After the student completes the Review Questions, the Score Card will be displayed. It shows whether the student passed or failed the
+	module. As a developer you will not have to do anything for this page, it's completely handled by SimCore.
+	<br /><br />
+	<img class="center" src="assets/img/score_card_page.png" style="max-width: 600px; height: auto;" />
+	<br /><br /><br />
+
+	<strong>Performance Report</strong>
+	<br />
+	The last section of a module is the Performance Report. It displays a detailed set of information for each of the activities, such
+	as the number of attempts it took to complete a task and the points they earned. The student can then download a copy of the report
+	as a PDF. The Performance Report is also completely handled by SimCore.
+	<br /><br />
+	<img class="center" src="assets/img/performance_report_page.png" style="max-width: 600px; height: auto;" />
+	<br /><br /><br />
+	In the next section we will go over the project directory structure.
+	<br /><br />
 </div>
 
 <style scoped="scoped">
