@@ -1,0 +1,194 @@
+<div class="page-text">
+SimMod uses the Vue.js single file architecture. In modern UI development, we have found that instead of dividing the codebase into three huge layers that interweaves with one another, it makes much more sense to divide them into loosely-coupled components and compose them. Inside a component, its template, logic and styles are inherently coupled, and collocating them actually makes the component more cohesive and maintainable. 
+<br /><br />
+Let's start off by looking at the basic structure of a view file. The code below shows the three basic parts of an activity view file. 
+
+<textarea>
+<template>
+    <!-- HTML template elements go here -->
+</template>
+
+<script>
+    /* Vue.js code goes here */
+</script>
+
+<style scoped>
+    /* View styles go here */
+</style>
+</textarea>
+
+<br />
+
+Let's take a closer look at each of these. We will start off with the template code block.
+<br /><br />
+<span class="page-text-heading">CodeBlock: Template</span>
+<br />
+<div class="hline" />
+<br />
+<textarea cols="130" rows="20" disabled="disabled">
+<template>
+    <view-box id="a1v1" :background="backgroundImg">
+        <!-- Content container required only for A1V1 -->
+        <content-box :clickable="isClickable" @action="incorrect(currentTask)">
+            <!-- ACTIVITY HTML GOES HERE -->
+        </content-box>
+    </view-box>
+</template>
+</textarea>
+
+<br />
+
+Every activity view template must have one single root element. Our root element for every activity view template is the view-box.
+The next required element is the content-box. All other activity html will be placed inside here. The ViewBox and ContentBox are both 
+covered in detail in the Widgets section.
+
+<br /><br />
+<span class="page-text-heading">CodeBlock: Script</span>
+<br />
+<div class="hline" />
+<br />
+<textarea disabled="disabled" cols="130" rows="27">
+<script>
+import A1V1Seq from './a1v1-seq.js'
+import ViewBox from '../../widgets/ViewBox'
+import ContentBox from '../../widgets/ContentBox'
+
+export default {
+    name: 'A1V1',
+    components: {
+        ViewBox,
+        ContentBox
+    },
+    data() {
+        return {
+            // Data properties go here
+        }
+    },
+    mounted() {
+ 		// Activity startup code goes here
+    },
+    methods: {
+        // Required for sequence file
+        ...A1V1Seq,
+        // Activity Helper functions go here
+    }
+}
+</script>
+</textarea>
+<br />
+The script block is made up of a list of imports and a default class object. The class object contains properties and methods
+that are required for the view to function properly.
+<br /><br />
+Line 2, 3, 4: <em>import</em> statements. You use them to include external script files and widgets into the view.
+<br /><br />
+Line 5: <em>export</em> object, this is the <em>default</em> class object that defines our view.
+<br /><br />
+Line 6: <em>name</em> property, it is used for registering the view component. Uppercase syntax is required.
+<br /><br />
+Line 7: <em>components</em> property, it is an object that contains each of the widgets that you import.
+<br /><br />
+Line 11: <em>data</em> property method. It returns an object of data properties.
+<br /><br />
+Line 15: <em>mounted</em> life-cycle hook method. We place view startup code here.
+<br /><br />
+Line 18: <em>methods</em> property. Contains helper methods for the view.
+<br /><br />
+
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+@import "https://fonts.googleapis.com/css?family=Source+Code+Pro";
+
+.lineline { 
+	max-height: 1000px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: green; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+#editor1 {
+	width: 800px;
+	height: 198px;
+}
+
+#editor2 {
+	width: 800px;
+	height: 152px;
+}
+
+#editor3 {
+	/*width: 800px;
+	height: 442px;*/
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

@@ -1,1 +1,203 @@
-<h1>Project Structure</h1>
+<div class="page-text">
+	Now it's time to introduce you to the projects directory structure. I will guide you through each of the directories and the files
+	that they contain. 
+	<br /><br />
+	<table>
+		<tr>
+			<td style="width: 550px; vertical-align: top;">
+				The root directory contains all of the project files. As an activity developer you only need to be concerned with
+				two of the directories. The <em>build</em> and <em>src</em> directories.
+				<br /><br />
+				The build directory is where all of the files get placed when you run a production build, which will be covered in another section.
+				<br /><br />
+				The <em>src</em> directory is the main folder that you will be working in. 
+				
+				<br /><br />
+				<span class="page-text-heading">Activities Folder</span>
+				<br />
+				<div class="hline" />
+				<br />
+				Each activity is stored in its own folder. All folders follow the same naming convention. A lowercase "a" followed
+				by the activity number. When you clone the SimMod project, the a1 folder is there by default. You will need to create the
+				additional folders based on how many activities the module that you are working on has.
+				<br /><br />
+				Activities have two types of files. A View file and a Sequence file. Every activity will have at least one view. You
+				are required to follow this naming convention. A view file must start with a capital "A" followed by the number of the activity, then a capital "V" and then the number of the view, so by default you will always have an A1V1.vue file. The 
+				file will not load if you use lowercase.
+				<br /><br />
+				The Sequence file also has a naming convention, "a1v1-seq". Lowercase is required for these files. Sequence files are JavaScript files. Both files are required. We will discuss each of these files, in depth in the next two topics.
+				<br /><br />
+				The activities folder also includes a boilerplates folder. In this folder you will find templates for View
+				and Sequence files. You can use these templates as a starting point, so that you don't have to type out all the required
+				code for each file.
+
+				<br /><br />
+				<span class="page-text-heading">Assets Folder</span>
+				<br />
+				<div class="hline" />
+				<br />
+				The assets folder is where you place all you audio, video and image files. It also contains a css and js folder, which
+				you will not use for building activities.
+				<br /><br />
+				When you start a new module project, you will be given a set of audio files. Audio files also follow a naming convention.
+				You will place the audio files into their corresponding folder. The a1 folder is provided by default and you will need
+				to create additional folders, following the same naming convention. 
+				<br /><br />
+				In addition to audio files, you will grab all the image files for a module from the SharePoint site and you will need
+				to place them in various locations. 
+				<br /><br />
+				Activity images go into the activities folder and you organize them just like with
+				audio files using a1, a2, etc. 
+				<br /><br />
+				If your module uses the Parts Department you will place the part images and the background into this folder. 
+				<br /><br />
+				For the Service Information menu, you place all images that need to be displayed in the Service Information window into 
+				the si-content folder.
+				<br /><br />
+				When using the Zoom feature, you will need to place a large (2560 x 1440) background image for the activity view in
+				the zoom-panel folder. The background image must be exactly that size or it will not align properly.
+				<br /><br />
+				The module folder is where you place standard backgrounds and other common module images.
+				<br /><br />
+				You will also need to grab the required video files from SharePoint and place them into Video folder. You will need
+				to rename the original files. Using the Concepts video gets renamed to uconcepts.mp4 and Understanding the Equipment
+				gets renamed to uequipment.mp4. If you do not use these names, the videos will not load.
+
+				<br /><br />
+				<span class="page-text-heading">Data Folder</span>
+				<br />
+				<div class="hline" />
+				<br />
+				When you setup the project you grabbed a zip folder that contains various json files, separated into two sub-folders,
+				module-data and activity-data.
+				<br /><br />
+				<strong>Module Data:</strong>
+				<br />
+				These files provide the module with data for such things as: activity title, menu items, task list, review questions & 
+				answers, along with end of activity screens and service information items. You simply copy these files directly into 
+				the data folder and SimCore will know where to locate them.
+				<br /><br />
+				<strong>Activity Data:</strong>
+				<br />
+				Each activity has its own set of data files. There are three possible files, the first two are always provided; 
+				a#-task-data.json and a#-response-data.json. The third file a#-assessment.json will only be available if the activity
+				has an assessment. The section <em>JSON Data</em> will go over each of these files in detail.
+				<br /><br />
+				You need to place the activity files in separate activity folders: a1, a2, etc.
+
+				<br /><br />
+				<span class="page-text-heading">Review Questions Folder</span>
+				<br />
+				<div class="hline" />
+				<br />
+				This folder contains a single file - ReviewQuestionsTemplate.vue. This is the file you use to layout the
+				review questions using the custom layout components.
+
+				<br /><br />
+				<span class="page-text-heading">SimCore Folder</span>
+				<br />
+				<div class="hline" />
+				<br />
+				The SimCore folder contains the all the files required to make the modules work. The only time you need to be
+				concerned with this folder is when we release updates or bug fixes. You will simply download the updated SimCore
+				zip file, unpack it and replace all the files with the new ones. Trying to edit any of these files will cause the
+				module to not function properly.
+
+				<br /><br />
+				<span class="page-text-heading">Widgets Folder</span>
+				<br />
+				<div class="hline" />
+				<br />
+				The widgets folder contains module widgets, such as HintBox and HotSpots, along with interactive widgets like the
+				Ignition Switch. Some widgets are provided for you and others you will need to build depending on the activity you are
+				working on. You can also put in a request to have a widget built and we will develop it for you.
+				<br /><br /><br />
+
+				Next up... Activity View files.
+			</td>
+			<td style="width: 360px; text-align: right;">
+				<img src="assets/img/project_structure/root_folders.png" style="max-width: 400px; height: auto;" />
+				<br /><br />
+				<img src="assets/img/project_structure/activities_folder.png" style="max-width: 400px; height: auto;" />
+				<br /><br />
+				<img src="assets/img/project_structure/assets_folder.png" style="max-width: 301px; height: auto;" />
+				<br /><br />
+				<img src="assets/img/project_structure/data_folder.png" style="max-width: 301px; height: auto;" />
+				<br /><br />
+				<img src="assets/img/project_structure/misc_folders.png" style="max-width: 301px; height: auto;" />
+			</td>
+		</tr>
+	</table>
+	<div id="root_folders_container">
+		<div id="left-col">
+			
+		</div>
+
+
+		<div id="right-col">
+			
+		</div>
+		
+	</div>
+</div>
+
+<style scoped="scoped">
+table {
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.left {
+	float: left;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 900px;
+}
+
+#root_folders_container {
+	float: left;
+	max-width: 800px;
+	max-height: 500px;
+}
+
+#left-col {
+	float: left;
+	max-width: 500px;
+}
+
+#right-col {
+	float: left;
+	max-width: 400px;
+}
+
+#right-col > img {
+	margin-left: 40px;
+}
+</style>
