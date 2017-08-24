@@ -1,7 +1,7 @@
 <div class="page-text">
-SimMod uses the Vue.js single file architecture. In modern UI development, we have found that instead of dividing the codebase into three huge layers that interweaves with one another, it makes much more sense to divide them into loosely-coupled components and compose them. Inside a component, its template, logic and styles are inherently coupled, and collocating them actually makes the component more cohesive and maintainable. 
+SimMod uses the Vue.js single file component architecture. In modern UI development, we have found that instead of dividing the codebase into three huge layers that interweaves with one another, it makes much more sense to divide them into loosely-coupled components and compose them. Inside a component, its template, logic and styles are inherently coupled, and collocating them actually makes the component more cohesive and maintainable. 
 <br /><br />
-Let's start off by looking at the basic structure of a view file. The code below shows the three basic parts of an activity view file. 
+The basic structure of a view component file. The code below shows the three basic parts of an activity view component file. 
 
 <textarea>
 <template>
@@ -28,26 +28,120 @@ Let's take a closer look at each of these. We will start off with the template c
 <textarea cols="130" rows="20" disabled="disabled">
 <template>
     <view-box id="a1v1" :background="backgroundImg">
+        <!-- INTRO & SAFETY SCREENS -->
+        <intro-screen></intro-screen>
+        <safety-screen
+            @isClosed="narrative()"
+            v-if="this.$core.Activity.safetyIsShown()"
+        >
+        </safety-screen>
+
         <!-- Content container required only for A1V1 -->
         <content-box :clickable="isClickable" @action="incorrect(currentTask)">
-            <!-- ACTIVITY HTML GOES HERE -->
+            <zoom-panel :bgimg="zoomPanelBgImg">
+                <!-- PARTS TRAY -->
+                <img id="parts-tray" src="assets/img/activities/parts_tray.png" />
+
+                <!-- TASK 1: Hint & Blue Cap -->
+                <hint-box id="t1-hint" v-hint="t1ShowHint"></hint-box>
+                <img id="blue-ac-cap"
+                    @click="t1a1()"
+                    :class="{ on: blueCapOn, off: blueCapOff }"
+                    src="assets/img/activities/blue_ac_cap.png"
+                />
+
+                <!-- TASK 2: Hint & Red Cap -->
+                <hint-box id="t2-hint" v-hint="t2ShowHint"></hint-box>
+                <img id="red-ac-cap"
+                    @click="t2a1()"
+                    :class="{ on: redCapOn, off: redCapOff }"
+                    src="assets/img/activities/red_ac_cap.png"
+                />
+            </zoom-panel>
         </content-box>
     </view-box>
 </template>
 </textarea>
+<br />
+Line 2: Every activity view template must have only one single root element. The root element for every activity view template is the 
+<em>view-box</em>. The <em>view-box</em> is covered in detail in the Widgets section.
+<br /><br />
+Line 4: In this example the view template is for <em>A1V1</em>, all first activities will require an <em>intro-screen</em> component. This
+component has no attributes or directives. You simply place it directly after the <em>view-box</em> component. You will use its <i>show</i>
+method in the <i>introScreen</i> method of the view's sequence file. This is discussed in the topic <i>Activity Sequence Files</i>.
+<br /><br />
+Line 5: If you are working on an equipment module, then a <em>safety-screen</em> component is required. You place the <em>safety-screen</em>
+component directly after the <em>intro-screen</em> component. The <em>safety-screen</em> contains a lightbox, text and continue button,
+which are automatically rendered when the <i>introScreen</i> audio completes or the student clicks the <em>intro-screen</em> 
+<i>continue button</i>.
+<br /><br />
+The <em>safety-screen</em> has a custom event attribute and a v-if directive.
+<br /><br />
+Line 6: The <em>@isClosed</em> is a custom event which gets emitted when the student clicks the <i>continue button</i>.
+<br /><br />
+
+<div class="dev-note">
+	The @ symbol is shorthand for the Vue <em>v-on</em> directive. With Vue we can have user defined custom events, along with the
+	standard set of events like: click, onmouseenter, onmouseleave, onchange, etc. 
+</div>
+
+<br />
+Line 7: The <em>v-if</em> directive is used to tell the component whether it should be rendered. The SimCore Activity object has a method
+<em>safetyIsShown</em> which will return <i>true</i> or <i>false</i>, which is triggered by the <em>intro-screen</em>.
+<br /><br />
+Line 12: The next required element is the <em>content-box</em>. For the most part, all of your activity elements will be placed inside this
+component. The <em>intro-screen</em> and <em>safety-screen</em> are placed outside of it because they overlay the view. SO any components or
+elements that you place outside the <em>content-box</em> will be rendered with a higher z-index.
+<br /><br />
+You can learn more about the <em>content-box</em> features in the Widgets section.
+<br /><br />
+Line 13: A common feature of activities is the ability to zoom in on the view. The <em>zoom-panel</em> widget gives you two levels of zoom.
+You wrap all the elements that need to be zoomed with this widget, anything outside the <em>zoom-panel</em> will not be zoomed and will be
+rendered at a higher z-index.
+<br /><br />
+Line 18: The <em>hint-box</em> is used in every activity. A student is given 3 attempts to get the task correct, on the 3rd attempt, a hint
+is shown. You position the <em>hint-box</em> using the <i>ID</i> you assign in and creating a set of style properties in the 
+<em>style</em> code-block at the bottom of the view file. Detailed information about this can be found in the Widgets section.
+<br /><br />
+Line 20: Here we are demonstrating an <i>image</i> element using the <em>@click</em> event to call a task action.
+<br /><br />
+Line 21: The <em>:class</em> is a bindable attribute. 
+<br /><br />
+
+<div class="dev-note">
+	The : symbol is shorthand for the Vue <em>v-bind</em> directive. A common need for data binding is manipulating an element’s class list and 
+	its inline styles. Since they are both attributes, we can use v-bind to handle them: we just need to calculate a final string with our
+	expressions. However, meddling with string concatenation is annoying and error-prone. For this reason, Vue provides special enhancements when : is used with class and style. In addition to strings, the expressions can also evaluate to objects or arrays.
+</div>
 
 <br />
 
-Every activity view template must have one single root element. Our root element for every activity view template is the view-box.
-The next required element is the content-box. All other activity html will be placed inside here. The ViewBox and ContentBox are both 
-covered in detail in the Widgets section.
+<div class="dev-note">
+	The use of jQuery is not permitted. Like other modern frameworks, such as Angular, Vue manages the rendering of components, so you
+	can not directly manipulate component DOM elements. You use directives and bindable data properties to interact with elements. 
+</div>
 
+<br />
+For this example we needed to have the cap image be displayed in two different locations for the task. One for when the cap is "on" the part
+and then another location when the cap is removed. So we created two css classes that define the position of the cap in the "on" and "off"
+positions.
 <br /><br />
+<em>:class="{ on: blueCapOn, off: blueCapOff }"</em> what we are doing here is using an object with the name of the classes as the "Key" and
+then we created data properties: <em>blueCapOn</em> and <em>blueCapOff</em> as the "Value", which are defined in the <em>data</em> method property of the
+<em>script</em> code-block which we will discuss in the next section below. When the value of the data property is set to <i>true</i>, the class
+is applied to the image.
+<br /><br />
+For more information about Class and Style bindings, visit <a href="https://vuejs.org/v2/guide/class-and-style.html" target="_blank">
+https://vuejs.org/v2/guide/class-and-style.html</a>.
+<br /><br /><br />
+
 <span class="page-text-heading">CodeBlock: Script</span>
 <br />
 <div class="hline" />
 <br />
-<textarea disabled="disabled" cols="130" rows="27">
+This sample code shows a generic outline of the script block.
+<br />
+<textarea>
 <script>
 import A1V1Seq from './a1v1-seq.js'
 import ViewBox from '../../widgets/ViewBox'
@@ -65,7 +159,7 @@ export default {
         }
     },
     mounted() {
- 		// Activity startup code goes here
+        // Activity startup code goes here
     },
     methods: {
         // Required for sequence file
@@ -77,23 +171,405 @@ export default {
 </textarea>
 <br />
 The script block is made up of a list of imports and a default class object. The class object contains properties and methods
-that are required for the view to function properly.
-<br /><br />
-Line 2, 3, 4: <em>import</em> statements. You use them to include external script files and widgets into the view.
-<br /><br />
-Line 5: <em>export</em> object, this is the <em>default</em> class object that defines our view.
-<br /><br />
-Line 6: <em>name</em> property, it is used for registering the view component. Uppercase syntax is required.
-<br /><br />
-Line 7: <em>components</em> property, it is an object that contains each of the widgets that you import.
-<br /><br />
-Line 11: <em>data</em> property method. It returns an object of data properties.
-<br /><br />
-Line 15: <em>mounted</em> life-cycle hook method. We place view startup code here.
-<br /><br />
-Line 18: <em>methods</em> property. Contains helper methods for the view.
+that are required for the view component to function properly.
 <br /><br />
 
+<span class="page-text-heading">Import Statements</span>
+<br />
+<div class="hline" />
+<br />
+Continuing with our example code, these are the imports that are required. The import statement is used to import functions, objects or
+primitives that have been exported from an external module, another script, etc.
+<br />
+<textarea>
+<script>
+import A1V1Seq from './a1v1-seq.js'
+import ViewBox from '../../widgets/ViewBox'
+import ContentBox from '../../widgets/ContentBox'
+import IntroScreen from '../../widgets/IntroScreen'
+import SafetyScreen from '../../widgets/SafetyScreen'
+import ZoomPanel from '../../widgets/ZoomPanel'
+import HintBox from '../../widgets/HintBox'
+....
+</script>
+</textarea>
+<br />
+When importing you will need to provide a <em>name</em> that will refer to the default export from the module, followed by a path to where
+you are importing the module from.
+<br /><br />
+Line 2: <em>A1V1Seq</em> imports methods from the views sequence file. You will learn about it in the Activity View Files page.
+<br /><br />
+Line 3: <em>ViewBox</em> imports the view-box widget.
+<br /><br />
+Line 4: <em>ContentBox</em> imports the content-box widget.
+<br /><br />
+Line 5: <em>IntroScreen</em> imports the intro-screen widget.
+<br /><br />
+Line 6: <em>SafetyScreen</em> imports the safety-screen widget.
+<br /><br />
+Line 7: <em>ZoomPanel</em> imports the zoom-panel widget.
+<br /><br />
+Line 8: <em>HintBox</em> imports the hint-box widget.
+<br /><br /><br />
+
+<span class="page-text-heading">Default Module: Name & Components Options</span>
+<br />
+<div class="hline" />
+<br />
+Here we will examine the first two properties of the module.
+<br />
+<textarea>
+export default {
+    name: 'A1V1',
+    components: {
+        ViewBox,
+        ContentBox,
+        IntroScreen,
+        SafetyScreen,
+        ZoomPanel,
+        HintBox
+    },
+    ....
+}
+</textarea>
+<br />
+Line 1: SimCore has an activityViewContainer that this view file is imported into, so we must export this as a default module.
+<br /><br />
+Line 2: The <em>name</em> option is the name of this module. You must use the naming convention as shown or the module will not load.
+<br /><br />
+Line 3: The <em>components</em> option is an object containing a list of all the widgets using the name that was used in import statement.
+<br /><br /><br />
+
+<span class="page-text-heading">Default Module: Data Option</span>
+<br />
+<div class="hline" />
+<br />
+The data option is much more than that. Anything in the data option will become <i>"reactive"</i> with the setters and getters that 
+Vue adds. The data option must be a function and it must return all the data properties as an object.
+<br />
+<textarea>
+export default {
+    ....
+
+    data() {
+        return {
+            // Required Properties
+            isClickable: false,
+            currentTask: 't1',
+            currentAttempts: 1,
+            currentPoints: 3,
+            backgroundImg: 'engine_compartment.png',
+
+            // View Specific properties 
+            zoomPanelBgImg: {
+                background: 'url(/assets/img/zoom-panel/engine_compartment_zoom.png)',
+                backgroundSize: '105%'
+            },
+            blueCapOn: true,
+            blueCapOff: false,
+            redCapOn: true,
+            redCapOff: false,
+
+            // Hints should always follow this naming convention
+            t1ShowHint: false,
+            t2ShowHint: false
+        }
+    },
+
+    ....
+}
+</textarea>
+<br />
+Line 7: The <em>isClickable</em> data property is required for <em>:clickable</em> attribute of the <em>content-box</em>. Detailed information
+about the <em>content-box</em> can be found in the Widgets section.
+<br /><br />
+Line 8: The <em>currentTask</em> data property. While developing sequences it is often required to perform task actions based what the current
+task is, this data property keeps track of it. You should set this to whatever the initial first task is for the view that you are working on.
+<br /><br />
+Line 9: The <em>currentAttempts</em> data property is required by the <em>incorrect</em> method which will be covered later on this page. 
+Students are given 3 attempts to get a task correct. Each time <em>incorrect</em> is called, it will increment this number. The
+counter checks to see if this value is less than 3, so by default it needs to be set to 1, because it will always take at least 1 attempt to
+get the task correct. 
+<br /><br />
+Line 10: The <em>currentPoints</em> data property is also required by the <em>incorrect</em> method. A task by default can have up to 3 points.
+Each time a student gets a incorrect attempt, the points are reduced by 1. If the student gets 3 wrong attempts, 0 points will be awarded.
+<br /><br />
+Line 11: The <em>backgroundImg</em> data property is required by the <em>view-box</em>.
+<br /><br />
+Line 14: The <em>zoomPanelBgImg</em> is required by the <em>zoom-panel</em>.
+<br /><br />
+Line 18 - 21: These data properties are used specifically for this activity view. In the section above about the <i>template</i>, I showed
+you an example of a bindable class, the class passed in an object with 2 keys and values, these properties are the boolean values that
+the images bindable class uses.
+<br /><br />
+Line 24: Every activity task will use the <em>hint-box</em>. The <em>hint-box</em> has a <em>v-hint</em> directive which is used to tell
+the <em>hint-box</em> to enable the hint. You need to create these data properties by prepending a lowercase "t" and the task number to
+<em>"ShowHint"</em>. The <em>incorrect</em> method requires this so that it can set the value to true for the current task. More details
+about the <em>hint-box</em> and how to use it are located in the Widgets section.
+<br /><br /><br />
+
+<span class="page-text-heading">Default Module: Mounted Option</span>
+<br />
+<div class="hline" />
+<br />
+The mounted option is a life cycle hook function that is called when the view component is ready and mounted to the DOM. Anything placed
+inside here will immediately be available when the function is called.
+<br />
+<textarea>
+export default {
+    ....
+
+    mounted() {
+        // Configure the view (Activity Title, View Mode[full/box], Activity ID)
+        this.$core.Activity.configView('System Recovery', 'full', 'A1')
+        // Initialize the activity view
+        this.$core.Activity.init([this.introScreen])
+
+        // Show Zoom Icons
+        this.$core.IconBar.Zoom.show()
+
+        // Show and Enable SI Menu Icon
+        this.$core.IconBar.ServiceInfo.show()
+        this.$core.IconBar.ServiceInfo.enable()
+    },    
+
+    ....
+}
+</textarea>
+<br />
+
+<div class="dev-note">
+	Before we discuss the mounted option, I want to talk about the use of the "this" key word. <em>this</em> refers to the instance of
+	the Vue component and in our case <em>this</em> refers to the view you are working on. SimCore provides a lot of core methods for you
+	and you will need to use the <em>this</em> keyword when using these methods. You can learn about each of SimCores methods in the
+	Core: API section. 
+	<br /><br />
+	Another thing that I need to discuss the <em>$core</em>. SimCore's functionality is global, the <em>$</em> represents a global 
+	reference. In the section on Activity Sequence Files, you will need to import the Vue object for use with the TransitionToView and
+	EndActivity methods because of how these methods work, the callback function can't access <em>this</em> instance of the view, so we
+	replace the <em>this</em> keyword with <em>Vue</em> and then we drop the <em>$</em> off <em>$core</em>, the reason for this is that
+	when we use <em>Vue</em> we are referring to the global namespace, so we do not need the <em>$</em> to access core functionality.
+	<br /><br />
+	Don't worry if right now this seems confusing, it will make more sense once you get familiar with the sequence file. I just felt it
+	was worth mentioning now.
+</div>
+
+<br />
+Every activity view is independent of the others, so it's required to configure every view.
+
+<br /><br />
+Line 6: To configure a view you call <em>this.$core.Activity.configView()</em>. Activity is a $core object which has many methods.
+The <em>configView</em> method requires 3 parameters:
+<br />
+<ol>
+	<li>Activity Title: The name of the activity you are working on.</li>
+	<li>View Mode: Full or Box (This was discussed in the Introduction to this section)</li>
+	<li>Activity ID: The naming convention for this is an uppercase "A" followed by the activity number</li>
+</ol>
+<br />
+Line 8: The next thing that you must do is initialize the view. To do this you call core's <em>init</em> method. The <em>init</em> method
+takes one parameter in the form of an array, its required that its passed in as an array, even though its a single parameter. What you are
+passing in is the first method in the sequence file that needs to be called. If you are working on the first activity of a module, then you
+need to call the <em>introScreen</em> method and to call any of the methods you need to prepend it with the <em>this</em> keyword. For any
+other view file you would call the first task or narrative. You will learn more about sequence methods in the Activity Sequence Files section.
+<br /><br />
+When working on activities you will need show and enable various icons on the iconbar. You will handle these from the <em>mounted</em> option.
+<br /><br />
+Line 11: In our example we are using the <em>zoom-panel</em> so we need to show the zoom icons. To do this you call the <em>show</em> method
+of core's IconBar.Zoom object. More info about IconBar can be found in the CORE: API section.
+<br /><br />
+Another commonly used icon is for Service Information. This icon needs to be shown first and then enabled. Depending on the activity
+sometimes you will show and enable the icon at the same time, other times you might need to show the icon and that when instructed, then
+enable it.
+<br /><br />
+Line 14: To show the Service Information icon you call the <em>show</em> method, just like we did for the zoom icons.
+<br /><br />
+Line 15: Now we need to enable the icon, you do this by calling the <em>enable</em> method.
+<br /><br />
+So to recap, you handle anything that the view needs here in the <em>mounted</em> option.
+<br /><br /><br />
+
+<span class="page-text-heading">Default Module: Methods Option</span>
+<br />
+<div class="hline" />
+<br />
+The methods option contains all the functions that the view uses. We import sequence methods from the activity view sequence file. You will
+write view helper functions here.
+<br />
+<textarea>
+export default {
+    ....
+
+    methods: {
+        // Required for sequence file
+        ...A1V1Seq,
+
+        // Required for incorrect responses and scoring
+        incorrect(task) {
+            if (this.currentAttempts < 3) {
+                this.incorrectResponse()
+                this.currentAttempts = (this.currentAttempts + 1)
+                this.currentPoints = (this.currentPoints - 1)
+            } else if (this.currentAttempts === 3) {
+                this.incorrectResponse()
+                this[task + 'ShowHint'] = true
+                this.currentPoints = 0
+            }
+        }
+    }    
+
+    ....
+}
+</textarea>
+<br />
+Line 6: When we looked at the import statements the first import was <em>A1V1Seq</em>, here we are using that import to add all the
+sequence methods. It uses the <i>ES6 spread operator</i> <em>...</em>, which is a shorthand way of grabbing all the methods that are exported and not having to individual list them.
+<br /><br />
+Line 9: We have discussed the <em>isClickable</em> data property and that it was required by the <em>incorrect</em> method. Well here is that
+method. This method is called from the <em>content-box's</em> action <em>@action</em> event. It passes in the <em>currentTask</em>.
+<br >
+<textarea>
+<content-box :clickable="isClickable" @action="incorrect(currentTask)">
+</textarea>
+<br />
+Line 10: A student gets 3 attempts to get the task correct, so here we check if <em>currentAttempts</em> is less than 3.
+<br /><br />
+Line 11: Calls the <em>incorrectResponse</em> sequence method. We will discuss this in the Activity Sequence Files section.
+<br /><br />
+Line 12: This increments <em>currentAttempts</em> by 1.
+<br /><br />
+Line 13: This decreases <em>currentPoints</em> by 1.
+<br /><br />
+Line 14: If <em>currentAttempts</em> equals 3, then the student is out of attempts.
+<br /><br />
+Line 15: Calls the <em>incorrectResponse</em> sequence method.
+<br /><br />
+Line 16: Here we are dynamically creating the ShowHint data property. As discussed <em>this</em> represents the instance of this view,
+which is an object, because it's an object we can use an objects bracket syntax <em>object['propertyName']</em> to reference the data
+property for the current tasks ShowHint property by concatenating the <em>currentTask</em> to "ShowHint" - 
+<em>this[task + 'ShowHint']</em>, gives us for example <em>t1ShowHint</em> which we then set it to true. Now the hint will show.
+<br /><br />
+Line 17: The student has used up all their attempts, so they will not be awarded any points, so we set <em>currentPoints</em> to 0.
+<br /><br /><br />
+As I stated above, the methods option is used for view helper functions, so lets take a look at some examples of some of the helper functions
+I create for a module I was working on.
+<br /><br />
+For the module I was working on I have a knob that the student needs to rotate between the On and Off positions for different tasks. The
+challenge was having the knob do multiple things at different times. One approach would be to create separate knobs and have a different
+<em>@click</em> event for each knob, but that would be repetitive and simply not a clean approach, so to solve the issue I created a helper
+method <em>whichTask()</em>.
+<br />
+<textarea>
+<template>
+    ....
+    <div id="knob-low" @click="whichTask()"></div>
+    ....
+</template>
+</textarea> 
+<br />
+<textarea>
+methods() {
+    ....
+
+    // The click event needs to call a diffrent function
+    // based on what the current task is when it's clicked.
+    whichTask() {
+        if (this.currentTask === 't10') {
+            this.t10a2()
+        } else if (this.currentTask === 't11') {
+            this.t11a2()
+        } else if (this.currentTask === 't12') {
+            this.t12a2()
+        } else if (this.currentTask === 't13') {
+            this.t13a2()
+        }
+    },
+
+    ....
+}
+</textarea> 
+<br />
+The <em>whichTask()</em> method, simply compares the <em>currentTask</em> to the defined task and then calls the task action that it needs.
+This would be a best practice approach to handing situations like this, which you will encounter more often then not.
+<br /><br />
+
+<div class="dev-note">
+	In the Activity Sequence Files section you will learn about creating Task functions and Task Action functions. In the above code block
+	on line 8 you see a reference to <em>this.t10a2()</em>. That refers to Task 10 Action 2. Sequence methods follow a naming convention
+	of using a lowercase "t" for task followed the the task number for task functions and then appending a lowercase "a" for action followed by
+	a number, when looking at <em>t10a2()</em>, its easy to know that there is also a <em>t10a1()</em> method.
+</div>
+<br /><br /><br />
+
+<span class="page-text-heading">CodeBlock: Style</span>
+<br />
+<div class="hline" />
+<br />
+Every view file has it's own set of css styles. The one great feature about this is that the views styles are scoped, which means they
+are encapsulated and can not interfere with any of the other views styles, so you can have a class with the same name in two different files 
+and not have to worry about it.
+<br />
+<textarea>
+<style scoped>
+#red-ac-cap.on {
+    position: absolute;
+    right: 459px;
+    top: 366px;
+    width: 10px;
+    height: auto;
+    z-index: 10;
+}
+
+#red-ac-cap.off {
+    position: absolute;
+    right: 520px;
+    top: 430px;
+    width: 15px;
+    height: auto;
+}
+
+#blue-ac-cap.on {
+    position: absolute;
+    left: 436px;
+    top: 35px;
+    width: 10px;
+    height: auto;
+    z-index: 10;
+}
+
+#blue-ac-cap.off {
+    position: absolute;
+    left: 436px;
+    top: 435px;
+    width: 15px;
+    height: auto;
+}
+
+#t1-hint {
+    position: absolute;
+    top: 30px;
+    left: 427px;
+    width: 21px;
+    height: 21px;
+    border-radius: 10px;
+}
+
+#t2-hint {
+    position: absolute;
+    right: 450px;
+    top: 359px;
+    width: 21px;
+    height: 21px;
+    border-radius: 10px;
+}
+</style>
+</textarea>
+<br /><br />
+Here are a few styles from the module that the above examples have been using. You can see the ON and OFF classes for the caps that I covered
+earlier. You can also see how to position hints.
+<br /><br /><br />
+Next up... Activity Sequence Files.
+<br /><br />
 </div>
 
 <script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
@@ -103,6 +579,14 @@ $('textarea').lineLine();
 
 <style scoped="scoped">
 @import "https://fonts.googleapis.com/css?family=Source+Code+Pro";
+
+.dev-note {
+	max-height: 400px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
 
 .lineline { 
 	max-height: 1000px; 

@@ -1,0 +1,450 @@
+<div class="page-text">
+An activity flows from task to task in a predefined sequence. The sequence file is where you will create your sequence of tasks. 
+The structure of a sequence file consists of series of methods every task method has a constructor method, which sets up the task. Tasks have actions, the actions are the individual steps a user must do to complete a task. Tasks are typically called by the previous task completed method and task actions can be called by a click event or from another task, depending on what you are trying to accomplish for any given task.
+<br /><br>
+SimCore provides you with various functions to be used within the task and task action methods for playing audio, applying correct and incorrect responses, interacting with the module shell, displaying assessments, opening and configuring the Parts Department and Tool Tray.
+<br /><br>
+Activities will have various numbers of tasks based on the module you are working on. It is highly recommended that you break the activity into separate views. As a best practice you should not exceed 8 tasks per file. When you use multiple view files, the task number should be carried
+over to each new view file.
+<br /><br>
+The sequence file has a basic structure which must be followed. Below is a simplified view of the file. The first thing that every sequence file must do is import data files and the Vue instance. These are provided in the boilerplate for you.
+<br /><br /><br />
+
+<div class="dev-note">
+	The use of jQuery is not permitted. Like other modern frameworks, such as Angular, Vue manages the rendering of components, so you
+	can not directly manipulate component DOM elements. You use directives and data properties to interact with elements. That being
+	said there are acceptable times when you can reference an element with <em>document.querySelector()</em>.
+	<br><br />
+	SimMod uses the GreenSock GSAP Animation Library <a href="https://greensock.com/gsap" target="">https://greensock.com/gsap</a>. GSAP
+	provides a wide range of tools for you to use. The primary tools you will use are <em>Draggable</em> and <em>TweenMax</em>, these tools
+	aid in animating, rotating and dragging elements. 
+</div>
+
+<br /><br /><br />
+
+<span class="page-text-heading">Import Statements</span>
+<br />
+<div class="hline" />
+<br />
+<textarea>
+import ResponseData from './data/a1-response-data.json'
+import TaskData from './data/a1-task-data.json'
+import Vue from 'vue'
+</textarea>
+<br />
+Line 1: <em>ResponseData</em>, this json file contains data for incorrect and correct responses. See the JSON Data - Activity Data topic for more information about this data file.
+<br /><br />
+Line 2: <em>TaskData</em>, this json file contains data for each task. See the JSON Data - Activity Data topic for more information about this data file.
+<br /><br />
+Line 3: <em>Vue</em>, you must import an instance of Vue for a couple of the methods to function properly. The last method of every sequence
+file will either be <em>transitionToView</em> or <em>endActivity</em>, both of these methods call SimCore methods and have a callback function
+that runs outside of the Vue instance, so to reference those methods, Vue must be imported. This topic will be covered in detail.
+<br /><br />
+
+<span class="page-text-heading">Method: incorrectResponse</span>
+<br />
+<div class="hline" />
+<br />
+The next section of code is required and is also provided in the boilerplate.
+<textarea>
+const incorrectResponse = function() {
+    this.$core.Activity.Audio.play(
+        ResponseData.incorrect.vo,
+        ResponseData.incorrect.cc
+    )
+}
+</textarea>
+<br />
+This method handles playing the audio and displaying the closed caption text. It is called from the incorrect method that is located in the view file in the methods property of the view class object. The method accepts two parameters, the incorrect audio file and the incorrect
+closed caption text from the ResposnseData object.
+<br /><br /><br />
+
+
+<span class="page-text-heading">Method: introScreen</span>
+<br />
+<div class="hline" />
+<br />
+You will only use this for the first activity view of a module. It displays a lightbox with a continue button, and plays the intro
+audio and displays the intro closed caption text.
+<br />
+<textarea>
+const introScreen = function() {
+    this.$core.Activity.showIntro()
+}
+</textarea>
+<br />
+Line 2: Simply call the <em>show</em> method and SimCore handles the rest. If the module you are working on is an equipment module, it
+will have a <em>SafetyScreen</em>. SimCore detects this and the Safety Screen will automatically handle displaying it for you.
+<br /><br /><br />
+
+
+<span class="page-text-heading">Method: narrative(#)</span>
+<br />
+<div class="hline" />
+<br />
+You will only use this for the first view of an activity. Narratives provide information about the activity.
+<br />
+<textarea>
+const narrative = function() {
+    this.$core.Activity.Audio.play(
+        TaskData.narrative1.vo,
+        TaskData.narrative1.cc,
+        () => { this.t1() }
+    )
+}
+</textarea>
+<br />
+Line 2: Narratives use the default <em>Audio</em> object, just call the <em>play</em> method and pass in the audio file and closed caption
+text from the <em>TaskData</em> data object, then add a callback. The callback will typically be used to call a task.
+<br /><br /><br />
+
+
+<span class="page-text-heading">Method: Task Constructor - t(#)</span>
+<br />
+<div class="hline" />
+<br />
+This is a task constructor method. The purpose for the constructor is to set the current task and to play the task's
+audio and display the closed caption text. 
+<br />
+<textarea>
+const t1 = function() {
+    // Set the current task
+    this.currentTask = 't1'
+    // Play task audio
+    this.$core.Activity.Audio.play(
+        TaskData.t1.vo,
+        TaskData.t1.cc,
+        () => { this.isClickable = true }
+    )
+}
+</textarea>
+<br />
+To make it easier to follow the sequence of code between this file and the view file this naming convention should be followed. Using any other naming scheme will lead to code that is harder to follow and maintain.
+<br /><br />
+Line 3: Sets the <em>currentTask</em> data property. While developing sequences it is often required to perform task actions based what
+the current task is, this data property keeps track of it.
+<br /><br />
+Line 5: As stated above the purpose of the constructor is to play the task audio file and display the closed caption text. The core Audio play method accepts two parameters and a callback. You pass in the audio file and closed caption text from the TaskData object, then you provide a
+callback which will be called when the audio is finished playing. 
+<br /><br />
+Line 8: The callback method uses the ES6 arrow function syntax, this is required and is typical for all callback methods.
+<br /><br />
+Typically the first thing that a student will need to do is click on something. The <em>isClickable</em> data property by default is set to
+<i>false</i>. The boolean value is used set the click event on the content-box's clickable attribute. When set to <i>true</i> it enables the
+click event which calls the <em>incorrect</em> helper method. So after the audio is done playing you want to immediately set this property to 
+<i>true</i>.
+<br /><br /><br />
+
+<span class="page-text-heading">Method: Task Action - t(#)a(#)</span>
+<br />
+<div class="hline" />
+<br />
+The task action methods should be single purpose functions that give you the ability to perform a step that a student must do like click a button, rotate a knob or drag an element. You can create as many task actions that you need to. Like task methods, this naming convention should be followed.
+<br />
+<textarea>
+const t1a1 = function() {
+    // Enable incorrect
+    this.isClickable = false
+    // Call correct method
+    this.$core.Activity.correct(
+        ResponseData.correct.t1.vo,
+        ResponseData.correct.t1.cc,
+        () => {
+            this.t1ShowHint = false
+            this.isClickable = true
+            this.t1Completed()
+        }
+    )
+}
+</textarea>
+<br />
+Typically the first task action will be handled by a click event, but you may encounter situations where you would call the first action from the task constructor.
+<br /><br />
+Line 3: In this example the action is called by a click event. This action is for the correct element that the student was supposed to
+click on so the first thing you need to do is <i>disable</i> the <em>isClickable</em> data property. It needs to be disabled, so that the
+click event doesn't bubble down to the content-box and fire off the <i>incorrect</i> response.
+<br /><br />
+Line 5: The <em>correct</em> method handles playing the audio file and displaying the closed caption text for the correct response. It takes two parameters and a callback. The correct audio file and closed caption text from the ResposnseData object.
+<br /><br />
+Line 9: Every time the correct method is called you need to set the tasks <em>ShowHint</em> data property to <i>false</i> to hide the hint.
+There is no need to first check if the hint is displayed due to it just being a data property. 
+<br /><br />
+Line 10: Next you set <em>isClickable</em> to <i>true</i>. This preps the next task and enables the <em>incorrect</em> click event.
+<br /><br />
+Line 11: The final step is to complete the task. So for this example <em>t1Completed</em> is called.
+<br /><br /><br />
+
+<span class="page-text-heading">Method: Task Completed</span>
+<br />
+<div class="hline" />
+<br />
+When the final task action is completed, the final task step is to complete the task.
+<br />
+<textarea>
+const t1Completed = function() {
+    this.$core.Activity.taskComplete(
+        TaskData.t1.reportLabel,
+        this.currentAttempts,
+        this.currentPoints
+    )
+    this.currentPoints = 3
+    this.currentAttempts = 1
+    this.transitionToView()
+}
+</textarea>
+<br />
+This function handles calling the <em>taskComplete</em> method, you need to pass in three parameters: the reportLabel from TaskData, the currentAttempts and the currentPoints. SimCore then updates the system. 
+<br /><br />
+Line 7: Now that the task is complete you need to reset the <em>currentPoints</em> to the default value of 3.
+<br /><br />
+Line 8: Next reset the <em>currentAttempts</em> back to the default value of 1.
+<br /><br />
+Line 9: The final step will be to call the next task, or <em>transistionToView</em> or <em>endActivity</em> methods depending on which 
+task you are working on.
+<br /><br /><br />
+
+
+<span class="page-text-heading">Method: assessment(#)</span>
+<br />
+<div class="hline" />
+<br />
+Assessments are a very common part of an activity. Typically there is only a single assessment per activity, but you may encounter
+modules that have several assessments per activity, they can be spread out or even one after another.
+<br /><br />
+The assessment window is a SimCore component that is prebuilt for you. You simply show it, configure it and then close it.
+<br />
+<textarea>
+const assessment1 = function() {
+    // Config the assessment
+    this.$core.Activity.Assessment.config(AssessmentData.assessment1, () => {
+        // Call final narrative
+        this.$core.Activity.Audio.play(
+            TaskData.narrative3.vo,
+            TaskData.narrative3.cc,
+            () => {
+                // Disable incorrect
+                this.isClickable = false
+                // End the activity
+                this.endActivity()
+            }
+        )
+    })
+    // Show the assessment
+    this.$core.Activity.Assessment.show()
+    // Call assessment audio
+    this.$core.Activity.Audio.play(
+        AssessmentData.assessment1.vo,
+        null,
+        () => {
+            // Disable incorrect
+            this.isClickable = false
+        }
+    )
+}
+</textarea>
+<br />
+Line 3: The assessment <em>config</em> method takes one parameter and a callback. The questions and answers are stored in  
+<em>assessment1</em> of the <em>AssessmentData</em> object. 
+<br /><br />
+Line 4: The callback in this example plays a final narrative, then calls the <em>endActivity</em> method. You can do whatever you need 
+to here, call another <i>assessment</i>, <i>transitionToView</i> or another task depending on the activity you are working on.
+<br /><br />
+Line 17: Now that the assessment is configured, you call the <em>show</em> method and it will display the assessment window for you. All
+of the assessment functionality is handled by the component.
+<br /><br />
+Line 19: Like a task, the assessment has audio that plays when its displayed, the difference is that there is no closed caption text for
+an assessment. So when you call the <em>play</em> method of the Audio object, you pass the audio file from the <em>AssessmentData</em>
+object and a null value for the closed caption text, then pass in the callback.
+<br /><br />
+Line 24: This callback is called when the audio plays, so you will want to set the <em>isClickable</em> data property to <i>false</i> to
+disable the <em>incorrect</em> method. The callback of the config is called when the student completes the assessment. 
+<br /><br /><br />
+
+
+
+<span class="page-text-heading">Method: transitionToView</span>
+<br />
+<div class="hline" />
+<br />
+When you need to transition to a new view a continue button needs to be displayed. SimCore provides this functionality for you.
+<br />
+<textarea>
+const transitionToView = function() {
+    this.$core.ContinueButton.show()
+    this.$core.ContinueButton.callback(() => {
+        Vue.core.ContinueButton.hide()
+        Vue.core.Activity.nextView('A1V2')
+    })
+}
+</textarea>
+<br />
+Line 2: Shows the continue button. The continue button is a SimCore component that handles its layout and click event.
+<br /><br />
+Line 3: The continue button has a callback method, a callback function is passed to it, SimCore then process the callback.
+<br /><br />
+Line 4: You will notice that the <em>'this'</em> keyword has been replaced with the <em>'Vue'</em> keyword and you also omit the <em>'$'</em>
+from the <em>core</em> keyword. SimCore process this outside of the instance of the view component, so to provide this functionality, the Vue instance must be referenced directly as opposed to using
+the <em>'this'</em> keyword to refer to it.
+<br /><br />
+Line 5: The <em>nextView</em> method will unload the current view and load the view and sequence files for the activityID you pass to it.
+<br /><br /><br />
+
+
+<span class="page-text-heading">Method: endActivity</span>
+<br />
+<div class="hline" />
+<br />
+When you need to end an activity a continue button needs to be displayed. SimCore provides this functionality for you. The 
+<em>endActivity</em> method is very similar to the <em>transitionToView</em> method.
+<br />
+<textarea>
+const endActivity = function() {
+    this.$core.ContinueButton.show()
+    this.$core.ContinueButton.callback(() => {
+        this.$core.Activity.Assessment.hide()
+        Vue.core.ContinueButton.hide()
+        Vue.core.Activity.end()
+    })
+}
+</textarea>
+<br />
+Line 2: Shows the continue button. The continue button is a SimCore component that handles its layout and click event.
+<br /><br />
+Line 3: The continue button has a callback method, a callback function is passed to it, SimCore then process the callback.
+<br /><br />
+Line 4: This line of code is optional and you will need to add if an assessment called this method. 
+<br /><br />
+Line 5: You will notice that the <em>'this'</em> keyword has been replaced with the <em>'Vue'</em> keyword and you also omit the <em>'$'</em>
+from the <em>core</em> keyword. SimCore process this outside of the instance of the view component, so to provide this functionality, the Vue instance must be referenced directly as opposed to using
+the <em>'this'</em> keyword to refer to it.
+<br /><br />
+Line 6: The <em>end</em> method handles all the stuff that needs to be handled for ending an activity, such as reseting default SimCore
+values, marking the activity complete in the system data, adding a check mark to the activity sub-menu and sending data to LTI. It also
+calls the End of Activity screen and plays the audio file.
+<br /><br /><br />
+
+<span class="page-text-heading">Export Methods</span>
+<br />
+<div class="hline" />
+<br />
+All of the methods you create will be imported into the activity view file. So you will need to export them. For every method you create,
+you simply list them as shown below.  
+<br />
+<textarea>
+export default {
+    incorrectResponse,
+    t1,
+    t1a1,
+    t1Completed,
+    transitionToView
+}
+</textarea>
+<br />
+This example is only showing a partial list that is not reflective of all the methods we covered in this topic.
+<br /><br />
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+@import "https://fonts.googleapis.com/css?family=Source+Code+Pro";
+
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+#editor1 {
+	width: 800px;
+	height: 198px;
+}
+
+#editor2 {
+	width: 800px;
+	height: 152px;
+}
+
+#editor3 {
+	/*width: 800px;
+	height: 442px;*/
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>
