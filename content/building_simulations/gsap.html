@@ -1,4 +1,5 @@
 <div class="page-text">
+	<h2>The new standard for HTML5 and javascript animation</h2>
 	Think of GSAP as the Swiss Army Knife of javascript animation... but better. It animates anything JavaScript can touch (CSS properties,
 	canvas library objects, SVG, generic objects, whatever) and it solves countless browser inconsistencies, all with blazing speed (up to 
 	20x faster than jQuery), including automatic GPU-acceleration of transforms. 
@@ -20,7 +21,10 @@
 
 	<span class="page-text-heading">TweenLite</span>
 	<br />
-	TweenLite is the fast, lightweight, and flexible core of GSAP (GreenSock Animation Platform), a JavaScript library for HTML5 animation.
+	TweenLite is an extremely fast, lightweight, and flexible animation tool that serves as the foundation of the GSAP. A TweenLite instance
+	handles tweening one or more properties of any object (or array of objects) over time. TweenLite can be used on its own to accomplish most
+	animation chores with minimal file size or it can be used in conjunction with advanced sequencing tools like TimelineLite or TimelineMax to
+	make complex tasks much simpler.
 	<br /><br />
 
 	<span class="page-text-heading">TweenMax</span>
@@ -28,9 +32,204 @@
 	TweenMax extends TweenLite, adding many useful (but non-essential) features like repeat(), repeatDelay(), yoyo(), staggered tweens, and
 	more. It also includes many extra tools and plugins by default, making it extremely full-featured (TweenLite, TimelineLite, TimelineMax,
 	CSSPlugin, AttrPlugin, RoundPropsPlugin, DirectionalRotationPlugin, BezierPlugin, and EasePack).
+	<br /><br /><br />
+
+<span class="page-text-heading">Example: Rotating a Knob</span>
+<br />
+<div class="hline" />
+<br />
+When you have a task that requires a student to rotate a knob or dial You will use the Draggable method.
+<br /><br />
+You must first import Draggable.
+<textarea>
+import { Draggable } from 'gsap'	
+</textarea>
+<br />
+This example is from the same module I used in the previous sections. Before I get into showing you to use the <em>Draggable</em> plugin. 
+I first need to talk about the use of the <em>"this"</em> keyword in relation to all of the GSAP plugins. When you use a GSAP plugin,
+<em>"this"</em> refers to the instance of the GSAP plugin you are using and not the instance of the view component. As we encountered in
+the previous section where we needed to import Vue and use that to reference the view's instance from core, here we need to reassign the 
+view module's instance to the keyword <em>"vm"</em>. VM represents the view module, so its a logical choice. You reassign it as follows:
+<textarea>
+let vm = this	
+</textarea>
+<br />
+In ES6 we no longer use the keyowrd <em>"var"</em>, we now use <em>"let"</em>. So now when you need to call a task action or set a data
+property from inside of any of the GSAP code blocks, just replace <em>"this"</em> with <em>"vm"</em>.
+<br />
+<textarea>
+// TASK 4: Action 1 (Rotate low-side knob)
+const t4a1 = function() {
+    let vm = this
+    Draggable.create('#knob-low', {
+        type: 'rotation',
+        throwProps: true,
+        bounds: {
+            minRotation: 0,
+            maxRotation: -90
+        },
+        onDrag: function() {
+            // Disable incorrect while dragging
+            vm.isClickable = false
+        },
+        onRelease: function() {
+            // Enable incorrect
+            vm.isClickable = true
+            // Check that the valve is open
+            if (this.rotation === -90) {
+                vm.t4a3()
+            }
+        }
+    })
+}
+</textarea>
+<br />
+<em>Draggable</em> has a lot of different properties, the ones above are all that were required to achieve the rotation I needed.
+<br /><br />
+Line 3: The reassignment of <em>this</em>.
+<br /><br />
+Line 4: To create a <em>Draggable</em> object you use its <em>create</em> method. It takes 2 parameters, the first is the ID of the element 
+using a jQuery style selector and the second is an object of properties.
+<br /><br />
+Line 5: <em>type</em> tells draggable which kind of drag you want. Options are <em>rotation</em> and <em>x,y</em>.
+<br /><br />
+Line 6: <em>throwProps</em> when set to true applies natural, momentum-based movement.
+<br /><br />
+Line 8 - 9: <em>bounds</em> sets the limit of the rotation start and end point. For this task, the Open position is 0 degrees and the Closed
+position is -90 degrees, with these set, the knob wont rotate past those positions.
+<br /><br />
+Line 11: <em>onDrag</em> this method is called when the student begins to rotate the knob (mousedown).
+<br /><br />
+Line 13: <em>isClickable</em> needs to be set to false. For this task rotating the knob is the correct action so we need to disable
+the incorrect method from being called.
+<br /><br />
+Line 15: <em>onRelease</em> this method is called when the student releases (mouseup).
+<br /><br />
+Line 17: <em>isClickable</em> needs to be set to true, now that the student finished rotating the knob and they have released the mouse,
+they are free to click anywhere on the screen, doing so would be an incorrect action so we need to enable the incorrect method.
+<br /><br />
+Line 19: We need to check if when they released the knob that its in the correct position, which for this task is -90.
+<br /><br />
+Line 20: If it's in the correct position then we call the next task action.
+<br /><br /><br>
+
+<span class="page-text-heading">Example: Tweening a Gauge Needle</span>
+<br />
+<div class="hline" />
+<br />
+There will be times when you just need to animate an object. For the task above, after the student rotated the knob, the gauge needle
+needed to animate from 0 psi to 170 psi, using TweenMax made this very quick and easy.
+<br >
+You must first import Draggable.
+<textarea>
+import { Draggable, TweenMax } from 'gsap'	
+</textarea>
+<textarea>
+// Rotate needle
+TweenMax.to('#needle-low', 6.0, {
+    rotation: -48
+})	
+</textarea>
+<br />
+Line 2: I am using TweenMax's <em>to</em> method. It takes three parameters, the first is the ID of the element and the second is the duration
+of time that you want to the animation to take to complete and the third is an object containing a single property. For my needs I set the
+duration to 6 seconds. 
+<br /><br />
+Line 3: The property being animated is <em>rotation</em>, which uses the css transform: rotate() property. I need the needle to rotate
+- 48 degrees.
+<br /><br /><br /
+That's it for the examples. I strongly encourage you to become familiar with all of the GSAP tools and to master their usage. This platform
+will provide you everything you need to accomplish tasks when building modules. To help you get started in learning how to use GSAP I have
+gathered a bunch or resources for you below.
+<br /><br />
+
+<span class="page-text-heading">Resources</span>
+<br />
+<div class="hline" />
+<br />
+<a href="https://ihatetomatoes.net/wp-content/uploads/2016/07/GreenSock-Cheatsheet-4.pdf" target="_blank">GSAP Cheatsheet (PDF)</a>
+<br /><br />
+
+<a href="https://greensock.com/get-started-js" target="_blank">Getting Started with GSAP</a>
+<br />
+Learn the basics of GSAP quickly with this video and article that'll have you animating in no time.
+<br /><br />
+
+<a href="https://greensock.com/jump-start-js" target="_blank">Jump Start: GSAP JS</a>
+<br />
+Learn the basics of GSAP JS fast. The Jump Start will walk you through a number of interactive slides that will show you exactly how GSAP 
+JS works. Animating with JavaScript just got a whole. 
+<br /><br />
+
+<a href="https://greensock.com/greensock101" target="_blank">GreenSock 101</a>
+<br />
+Learn the core of GSAP in 60 minutes. Petr Tichy from ihatetomatoes.net has created a fantastic video series that is perfect for beginners.
+<br /><br />
+
+<a href="https://greensock.com/docs" target="_blank">Official GSAP Docs</a>
+<br />
+Animating with code may seem intimidating at first, but don’t worry, our platform was engineered to make it simple and intuitive.
+<br /><br />
 </div>
 
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
 <style scoped="scoped">
+@import "https://fonts.googleapis.com/css?family=Source+Code+Pro";
+
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
 .center {
 	margin: 0 auto;
 	display: block;
