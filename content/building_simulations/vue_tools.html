@@ -1,0 +1,80 @@
+<div class="page-text">
+	Vue apps are a joy to write, and often fairly easy to debug. But do you know what would make debugging better? A dedicated way to hook 
+	into Vue apps and manipulate them from your browser’s devtools. Vue2 now has an updated Chrome plugin that makes debugging simple and
+	easy.
+	<br /><br />
+	Vue has a quality Chrome extension that allows inspecting component trees, reviewing events, and time-travel debugging of Vuex states. 
+	These features make debugging ridiculously simple, even for fairly large apps.
+	<br /><br />
+
+	<span class="page-text-heading">Installation</span>
+	<br />
+	<div class="hline" />
+	<br />
+	The Vue devtools can be installed from the <a href="https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd" target="_blank">Chrome Web Store.</a>
+	<br /><br /><br />
+
+	<span class="page-text-heading">Component Tree</span>
+	<br />
+	<div class="hline" />
+	<br />
+	The devtools provide a DOM-style tree overview of all the components in your app, with information about each component’s data, 
+	properties, computed properties, and vuex bindings in the details pane.
+	<br /><br />
+	<img class="center" src="assets/img/vue_component_tree.png" style="max-width: 800px; height: auto;" />
+	<br /><br />
+	This is an invaluable tool, at any time you can check to see the state of your data properties. To see all the data properties for a
+	view, click on the tree node with the view's ID - in this the image above the viewID is A1V1. The panel on the right displays a list
+	of all the data properties and their current values. This gives you the ability to watch the properties in real-time to make sure that
+	they are getting set.
+	<br /><br /><br />
+
+	<span class="page-text-heading">Time-Travel Debugging</span>
+	<br />
+	<div class="hline" />
+	<br />
+	Hands down the most useful feature of the devtools is time-travel debugging for apps using Vuex. It allows you to observe, revert, and
+	flatten your Vuex store over time. You could use this to revert to a previous state, replay events to get a second look at bugs, or inspect
+	the various moving parts that go into making a Vuex store work in the details pane.
+	<br /><br />
+	<img class="center" src="assets/img/time_travel.png" style="max-width: 800px; height: auto;" />
+	<br /><br />
+	This is an invaluable tool, at any time you can check to see the state of your data properties. To see all the data properties for a
+	view, click on the tree node with the view's ID - in this the image above the viewID is A1V1. The panel on the right displays a list
+	of all the data properties and their current values. This gives you the ability to watch the properties in real-time to make sure that
+	they are getting set.
+	<br /><br />
+	In the upper right-hand corner you will see the Export and Import icons. Export will copy all data to the clipboard and Import lets
+	you select a data property and them import new data to update it. 
+	<br /><br />
+</div>
+
+<style scoped="scoped">
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>
