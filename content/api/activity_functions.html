@@ -1,0 +1,135 @@
+<div class="page-text">
+	The <em>Activity</em> API object contains a variety of methods to assist you in developing activities. Many of these you have already
+	encountered in the <em>Building Simulations</em> section.
+	<br /><br />
+	<ol>
+		<li>configView(title, mode, id)</li>
+		<li>init(task_method, callback)</li>
+
+		<li>showIntro()</li>
+
+		<li>showLightBox()</li>
+		<li>hideLightBox()</li>
+
+		<li>correct()</li>
+		<li>taskComplete(label, attempts, score)</li>
+
+		<li>nextView(view)</li>
+		<li>end()</li>
+
+		<li>Audio.voDone()</li>
+		<li>Audio.play()</li>
+		<li>Audio.response()</li>
+		<li>Audio.clearPlaylist()</li>
+	</ol>
+	<br />
+	#1: The <em>configView(title, mode, id)</em> method is required for every activity view file. It accepts three parameters.
+	<ol>
+		<li>title: this is the activity title. It's located in the top center of the page just left of the Cengage logo.</li>
+		<li>mode: the are two page modes; full and box. These are discussed in the <i>Building Simulations Introduction</i>.</li>
+		<li>id: this is the activity id and it's also required.</li>
+	</ol>
+
+	#2: The <em>init([task_method])</em> method is required to initialize an activity view and to call the first sequence task method
+	that is required for the activity view you are working on. You must pass in the task method as an array.
+	<br />
+<textarea>
+this.$core.Activity.init([this.introScreen])
+</textarea>
+	<br />
+	#3: The <em>showIntro()</em> method is called for all A1V1 activity view files.
+	<br />
+<textarea>
+const introScreen = function() {
+    this.$core.Activity.showIntro()
+}	
+</textarea>
+	<br />
+	#4: The <em>showLightBox()</em> method
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

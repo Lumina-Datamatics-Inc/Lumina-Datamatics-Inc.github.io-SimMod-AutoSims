@@ -1,0 +1,138 @@
+<div class="page-text">
+The <em>ContentBox</em> is the main area where you place all your activity html elements. It's also responsible for handling incorrect clicks.
+Students typically click on elements as part of completing a task. They will either click on the element that is correct, or they will
+click elsewhere, the <em>ContentBox</em> listens for click events and if its <em>:isClickable</em> attribute is set to true, it will emit the
+<em>@action</em> event which calls the <em>incorrect()</em> method.
+<br />
+<textarea>
+....
+<content-box :clickable="isClickable" @action="incorrect(currentTask)">
+	....
+</content-box>
+....
+</textarea>
+<br />
+By default <em>isClickable</em> needs to be set to false.
+<br />
+<textarea>
+....
+data() {
+    return {
+        isClickable: false,
+        ....
+    }
+},
+....
+</textarea>
+<br />
+The <em>incorrect</em> method takes care the users attempts, score (points) and the incorrect response. It also updates the current task's
+hint value to true. The <em>HintBox</em> is the next topic.
+<br />
+<textarea>
+....
+methods: {
+    ....
+    incorrect(task) {
+        if (this.currentAttempts < 3) {
+            this.incorrectResponse()
+            this.currentAttempts = (this.currentAttempts + 1)
+            this.currentPoints = (this.currentPoints - 1)
+        } else if (this.currentAttempts === 3) {
+            this.incorrectResponse()
+            this[task + 'ShowHint'] = true
+            this.currentPoints = 0
+        }
+    }
+}
+....	
+</textarea>
+<br />
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

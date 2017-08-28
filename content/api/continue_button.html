@@ -1,0 +1,144 @@
+<div class="page-text">
+	The <em>Continue Button</em> is a common feature of SimMod. It's used to go from Activity View to Activity View and from Activity to Activity. The SimCore API provides you with 5 methods for using it.
+	<br /><br />
+
+	<ol>
+		<li>show()</li>
+		<li>hide()</li>
+		<li>next(view)</li>
+		<li>end()</li>
+		<li>callback(callback)</li>
+	</ol>
+	<br />
+	#1: The <em>show()</em> method will display the Continue Button. It has a fixed location, and there are no styles to set for it.
+	<br /><br />
+	#2: The <em>hide()</em> method hides the Continue Button. 
+	<br /><br />
+	#3: The <em>next(view)</em> method is used when you need to display another Activity View. The view parameter is the <i>ID</i>
+	of the view you want to load. For example 'A1V2'.
+	<br /><br />
+	#4: The <em>end()</em> method is used to call the End of Activity screen. Calling this method also triggers SimCore to handle internal
+	functions for ending the activity, such has processing the score, resetting global UI state and handling reporting data.
+	<br /><br />
+	#5: The <em>callback(callback)</em> method is required. By default it hides the button, calls the end() method and you can also call
+	any methods you need to in order to complete an activity, such as hiding an assessment.
+	<br /><br />
+	You will use the methods for the Continue Button in the endActivity() sequence method as show below.
+	<br />
+<textarea>
+// End Activity 1 (Required)
+// This is called to end the activity
+const endActivity = function() {
+    this.$core.ContinueButton.show()
+    this.$core.ContinueButton.callback(() => {
+        this.$core.Activity.Assessment.hide()
+        Vue.core.ContinueButton.hide()
+        Vue.core.Activity.end()
+    })
+}	
+</textarea>
+	<br />
+	In this example we are ending an activity. 
+	<br /><br />
+
+<textarea>
+// Transition To View (Required)
+// This is called to transition to next view
+const transitionToView = function() {
+    this.$core.ContinueButton.show()
+    this.$core.ContinueButton.callback(() => {
+        Vue.$core.ContinueButton.hide()
+        Vue.$core.Activity.nextView('A1V2')
+    })
+}
+</textarea>
+	<br />
+	In this example we are transitioning to another view. 
+	<br /><br />
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

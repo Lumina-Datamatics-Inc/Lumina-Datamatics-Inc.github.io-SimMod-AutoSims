@@ -1,0 +1,112 @@
+<div class="page-text">
+Every view file can only have a single root element. The <em>ViewBox</em> is the view's root element. SimCore uses an activity view container to
+render each activity view, basically it grabs all the contents of the <em>ViewBox</em> and renders it to the view container.
+<br />
+<textarea>
+<view-box id="a1v1" :background="backgroundImg">
+    ....
+</view-box>
+</textarea>
+<textarea>
+name: A1V1,
+....
+data() {
+    return {
+        ....
+        backgroundImg: 'your_background_image.png',
+        ....
+    }
+},
+....
+</textarea>
+<br />
+The ViewBox widget requires an <em>id</em> and a background image. The <em>id</em> is the same as the name you provide for the view module, with the exception that its all lowercase. For the <em>:background</em>, you need to add the <em>backgroundImg</em> data property and the image file name.
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

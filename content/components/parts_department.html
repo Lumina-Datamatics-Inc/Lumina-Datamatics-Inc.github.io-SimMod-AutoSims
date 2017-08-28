@@ -1,0 +1,300 @@
+<div class="page-text">
+The <em>PartsDepartment</em> component is a bit more complex then the other widgets we have discussed. It requires you to setup and configure
+several new options. It has two main areas. The first is the <em>Parts Department</em> itself, which is an overlay window with a background and
+configurable hotspot. The second is the <em>Part</em>, that you will select and that will be dropped into the activity view.
+<br /><br />
+The only html you add is for the <em>parts-department-part</em> widget. This represents the part that you are getting from the 
+<em>Parts Department</em>
+<br /><br />
+To use the <em>Parts Department</em> you will need to show and enable its icons. Depending on when the <em>Parts Department</em> should
+be available to the student, dictates when and where you call the method to show it. In most cases you would do this in the activity view
+file in the <em>mounted</em> option. In this example we will be calling the show and enable method from an activity sequence task method.
+<br /><br />
+<textarea>
+// a2v2-seq.js Activity Task Sequence File	
+....
+// TASK 3: Retrieve new BCM from Parts Department
+const t3 = function() {
+    // Show the Parts Department icon
+    this.$core.IconBar.PartsDepartment.show()
+    
+    // Enable the Parts Department icon
+    this.$core.IconBar.PartsDepartment.enable()
+    
+    // Configure the Parts Department
+    this.$core.PartsDepartment.config({
+        hotspot: {
+            top: '220px',
+            left: '158px',
+            width: '120px',
+            height: '35px',
+            bgColor: '',
+            borderRadius: '25px'
+        },
+        image: {
+            bgImg: 'parts_department_BCMs.jpg',
+            bgSize: '100%'
+        },
+        incorrectVO: ResponseData.incorrect.vo,
+        incorrectCC: ResponseData.incorrect.cc
+    })
+    ....
+}
+....
+</textarea>
+<br />
+Line 6: Show the Parts Department icon.
+<br /><br />
+Line 9: Enable the Parts Department icon.
+<br /><br />
+Line 12: The Parts Department needs to be configured.
+<br /><br />
+Line 13: The first thing that you will configure is the <em>HotSpot</em>, this is the region of the background image that the student
+needs to click on.
+<br /><br />
+Lines 14 - 15: The <em>HotSpot</em> is absolute positioned and you align it where you need it by setting it's Top and Left position.
+<br /><br />
+Lines 16 - 17: You also need to set the width and height of the <em>HotSpot</em>.
+<br /><br />
+Line 18: The <em>bgColor</em> is only used so that you can see the <em>HotSpot</em> while positioning it. Set this back to blank after
+you have it positioned where you need it.
+<br /><br />
+Line 19: The <em>borderRadius</em> allows you to change the shape of the <em>HotSpot</em>.
+<br /><br />
+
+Now that the <em>Parts Department</em> is configured, we move on to the <em>Parts Department Part</em>. When the student clicks on the
+<em>Parts Department HotSpot</em>, the <em>Parts Department</em> overlay window will close and the selected part will be displayed
+in the activity view. You create the part using the <em>parts-department-part</em> widget.
+<br /><br />
+The <em>parts-department-part</em> is draggable by default, so you do not have to write any of the code for it. Everything is self contained
+in the widget.
+<textarea>
+<template>
+    <hint-box id="t1-hint" v-hint="t1ShowHint"></hint-box>
+    <!-- Part Image to be displayed when part is dropped -->
+    <img id="bcm-connectors"
+        v-show="bcmShow"
+        @click="isClickable ? t1a1() : null"
+        src="../../activities/activity_2/img/connectors.png"
+    />
+    <!-- Part Image shown before part is removed -->
+    <img id="bcm-no-connectors"
+        v-show="bcmNoShow"
+        @click="isClickable ? t2a1() : null"
+        @mousedown="isClickable ? t2a1() : null"
+        src="../../activities/activity_2/img/no_connectors.png"
+    />
+    <!-- Part Image to be displayed when part is removed -->
+    <img id="bcm-connectors-out"
+        v-show="bcmOutShow"
+        src="../../activities/activity_2/img/BCM_Connector.png"
+    />
+    
+    <parts-department-part
+        dropZone="t1-hint"
+        v-if="partAdded"
+        @dropped="partDropped()"
+    >
+    </parts-department-part>
+    ....
+</template>
+</textarea>
+<br />
+The <em>parts-department-part</em> has a <em>dropZone</em> attribute, a <em>v-if</em> directive and a <em>dropped</em> event.
+<br /><br />
+Line 23: The <em>dropZone</em> defines where the part should be dropped for a correct response. You could use a <em>hot-spot</em>
+widget for this, but then you would also need a <em>hint-box</em> and because the <em>dropZone</em> requires no click event, the
+best approach is to use a <em>hint-box</em>. You simply give the <i>ID</i> of the <em>hint-box</em> to use.
+<br /><br />
+Line 24: If the <em>partAdded</em> equals true, the part will be shown, by default <em>partAdded</em> equals false.
+<br /><br />
+Line 25: The <em>@dropped</em> event is fired when you drag the part and drop it, if it is dropped in the correct spot it sets a $core value
+to true, otherwise it's set to false. Then the <em>partDropped()</em> method is called, which is explained below.
+<br />
+<textarea>
+<script>
+    ....
+    computed: {
+        // Required Computed Property for Parts Department Part
+        partAdded() {
+            return this.$core.PartsDepartment.Part.getPart()
+        }
+    },
+    watch: {
+        // Required Watcher for Parts Department Part
+        partAdded(newVal) {
+            if (newVal === true) {
+                this.task4()
+            }
+        }
+    },
+    ....
+</script>
+</textarea>
+<br />
+Above you will see options that you have not encountered before in SimMod, these are the <em>computed</em> and <em>watch</em> options.
+A computed property is simply a reactive data property. You create the property as function that returns a value. And the <em>watch</em>
+option is a watcher for a property, it watches for when the property changes then emits the new value.
+<br /><br />
+Line 5: The <em>partAdded</em> computed property returns the results of the $core method <em>getPart()</em>. It will return true or false
+and this is used in the <em>v-if</em> directive of the part to show or hide it.
+<br /><br />
+Line 11: The watcher of this property will wait for the value to change, and if the new value equals true, then it calls the required 
+sequence task method.
+<br />
+<textarea>
+<script>
+    ....
+    computed: {
+    	....
+    },
+    watch: {
+    	....
+    },
+    methods: {
+        ....
+        // Required method that gets called when the Parts Department Part is Dropped.
+        partDropped() {
+            let correctDrop = this.$core.PartsDepartment.Part.isCorrect()
+            if (correctDrop === true) {
+                this.$core.PartsDepartment.Part.hide()
+                this.bcmNoShow = true
+                this.$core.Activity.correct()
+            } else {
+                this.incorrect()
+            }
+        }
+    }
+    ....
+</script>
+</textarea>
+<br />
+You will need to handle when the part is dropped, the <em>partDropped()</em> method is called from the <em>@drooped</em> event of the
+<em>parts-department-part</em>.
+<br /><br />
+Line 13: First we create a variable using the ES6 <i>let</i> keyword. The value of this variable is the returned value of another $core
+method of the PartsDepartment object. The <em>isCorrect()</em> method will return true or false based on if the part has been dropped.
+<br /><br />
+Line 14: Checks if the value is equal to true.
+<br /><br />
+Line 15: When the part is dropped in the correct spot, it needs to be hidden, so we call another PartsDepartment object 
+method - <em>hide()</em>. We need to hide the part element so that we can show the part image after its been drooped.
+<br /><br />
+Line 16: On line 6 in the code above that shows the <em>template code</em>, the image has the following directive <em>v-show="bcmShow"</em>,
+so we set this property to true, to show the image.
+<br /><br />
+Line 17: Now we call the $core <em>correct()</em> method.
+<br /><br />
+Line 19: If the <em>correctDrop</em> variable equals false we call the <em>incorrect()</em> method.
+<br />
+<textarea>
+<style scoped>
+    ....
+    #t1-hotspot {
+        position: absolute;
+        left: 185px;
+        top: 354px;
+        width: 100px;
+        height: 25px;
+        z-index: 2;
+    }
+    ....
+}
+</style>	
+</textarea>
+<br />
+The <em>HotSpot</em> requires you to position it on the screen. You will need to create styles for each individual <em>HotSpot</em>. You
+will need to position this above a <em>HintBox</em>, the <em>HotSpot</em> must be at a higher z-index or it wont be able to be clicked.
+<br /><br />
+When you need to use the Parts Department, the logic will vary based on the type of part you are adding. The code example I have show here
+was specific to the tasks for the module I was working on. But this should give you a starting point for when you need to use it.
+<br /><br />
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

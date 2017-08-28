@@ -1,0 +1,174 @@
+<div class="page-text">
+The <em>ZoomPanel</em> widget is used to provide zooming to an activity to the <em>content-box</em>. So you must place it directly after the
+opening tag as shown below. You then place any elements inside the <em>zoom-panel</em> that you want to be zoomed. If you have elements that
+you do not want to zoom, then place them outside the <em>zoom-panel</em> as shown below.
+<br /><br />
+The <em>zoom-panel</em> provides two levels of zooming in and out.
+<br />
+<textarea>
+....
+<content-box :clickable="isClickable" @action="incorrect(currentTask)">
+   <!-- Place elements here that you do not want to be zoomable -->
+   <zoom-panel :bgimg="zoomPanelBgImg">
+        <!-- Elements placed here will zoom -->
+   </zoom-panel>
+</content-box>
+....
+</textarea>
+<br />
+The <em>zoom-panel</em> requires a background image, so you need to add a data property object named <em>zoomPanelBgImg</em>, you are passing
+in two css properties, the <i>background</i> and <i>backgroundSize</i>. The <i>background</i> requires a full path to the image. All
+<em>zoom-panel</em> background images need to be located at <em>'/assets/img/zoom-panel/engine_compartment_zoom_bg.png'</em>.
+<br /><br />
+The background image for the <em>zoom-panel</em> must be exactly 2560 x 1440. If the image is not this size the background will not
+align properly when zoomed. The <i>backgroundSize</i> needs to be set to <em>105%</em>.
+<br />
+<textarea>
+....
+data() {
+    return {
+        ....
+        zoomPanelBgImg: {
+            background: 'url(/assets/img/zoom-panel/engine_compartment_zoom_bg.png)',
+            backgroundSize: '105%'
+        },
+        ....
+    }
+},
+....
+</textarea>
+<br />
+The next thing that you need to do is to show and enable the <em>Zoom Icons</em>. 
+<br />
+<textarea>
+....
+mounted() {
+    ....
+    // Show Zoom Icons
+    this.$core.IconBar.Zoom.show()
+    this.$core.IconBar.Zoom.enable()
+    ....
+},
+....
+</textarea>
+<br />
+<img src="/assets/img/zoom_icons.png" />
+<br /><br />
+All icons are part of the <em>$core.IconBar</em> object, and Zoom is
+an object within that. Zoom has four methods.
+<ol>
+	<li>show()</li>
+	<li>enable()</li>
+	<li>disable()</li>
+	<li>hide()</li>
+</ol>
+<em>show()</em> - simply displays the icons on the iconbar, at this point that are disabled and can not be clicked. They will be grayed out.
+<br />
+<em>enable()</em> - this makes the icons clickable, and changes them to white.
+<br />
+<em>disable()</em> - this returns the icons to their default state, and they turn gray again.
+<br />
+<em>hide()</em> - this removes them from the iconbar.
+
+<br /><br />
+When you use the <em>zoom-panel</em> you will need to add a css class for the <em>content-box</em> and set it's <em>overflow</em> property to hidden. You do not need to add a class attribute to the <em>content-box</em>, the widget already has it defined.
+<br />
+<textarea>
+<style scoped>
+    .content-box {
+        overflow: hidden; /* ZoomPanel */
+    }
+    ....
+}
+</style>	
+</textarea>
+<br />
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

@@ -1,0 +1,141 @@
+<div class="page-text">
+The <em>HintBox</em> is is used to show the student where the correct place to click is located. The <em>HintBox</em> requires an
+<em>id</em> for adding a css style for positioning it on the screen. The naming convention for the <em>id</em> is the task perpended to <i>-hint</i>. 
+<br /><br />
+It also has a  <em>v-hint</em> directive that requires a boolean data property. You must follow this naming convention as well or it will not work properly. Prepend the task to <i>ShowHint</i> to create the property name. 
+<br /><br />
+When this data property is set to true, the <em>HintBox</em> will display, it has a yellow border and blinks, this is provided as part of this widget. 
+<br />
+<textarea>
+....
+<hint-box id="t1-hint" v-hint="t1ShowHint"></hint-box>
+....
+</textarea>
+<br />
+The <em>HintBox</em> doesn't allow for any content to be placed between its opening and closing tags. Anything placed between the tags will
+be ignored.
+<br /><br />
+By default <em>t1ShowHint</em> needs to be set to false. You should set it to true when you need to position it on the screen.
+<br />
+<textarea>
+....
+data() {
+    return {
+    	....
+        t1ShowHint: false,
+        ....
+    }
+},
+....
+</textarea>
+<br />
+The <em>HintBox</em> requires you to position it on the screen. You will need to create styles for each individual <em>HintBox</em>
+that you use. There will be situations where you will have to position this beneath another widget such as the <em>HotSpot</em>, or
+an clickable image the <em>HintBox</em> must be at a lower z-index or it will block the click event.
+<br />
+<textarea>
+<style scoped>
+    ....
+    #t1-hint {
+    	position: absolute;
+    	left: 181px;
+    	top: 352px;
+    	width: 102px;
+    	height: 25px;
+    	border-radius: 10px;
+    	z-index: 1;
+    }
+    ....
+}
+</style>	
+</textarea>
+<br />
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>
