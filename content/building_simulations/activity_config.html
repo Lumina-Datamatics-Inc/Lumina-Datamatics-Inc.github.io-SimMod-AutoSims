@@ -1,0 +1,110 @@
+<div class="page-text">
+Activities need to be manually configured. You have to tell SimCore what activity view files are needed and where to find them. Locate the
+activities.js file inside the activities folder. Each time you create a new file, you need to update it here as follows:
+<br />
+<textarea>
+import A1V1 from './a1/A1V1.vue'
+import A1V2 from './a1/A1V2.vue'
+import A1V3 from './a1/A1V3.vue'
+import A2V1 from './a2/A2V1.vue'
+import A3V1 from './a3/A3V1.vue'
+import A4V1 from './a4/A4V1.vue'
+import A4V2 from './a4/A4V2.vue'
+
+export default {
+    A1V1,
+    A1V2,
+    A1V3,
+    A2V1,
+    A3V1,
+    A4V1,
+    A4V2
+}
+</textarea>
+</div>
+
+<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script>
+$('textarea').lineLine();
+</script>
+
+<style scoped="scoped">
+.dev-note {
+	max-height: 200px; 
+	width: 780px;
+	padding: 10px;
+	background-color: #eff0f2; 
+	border: 3px solid #ccc;
+}
+
+.lineline { 
+	max-height: 600px; 
+	width: 800px; 
+	margin: 10px auto 0; 
+	border: 3px solid #ccc;
+	background-color: black;
+	padding: 0px; 
+	overflow: auto; 
+	text-align: left; 
+}
+
+.lineline-numbers { 
+	width: 20px; 
+	border-right: 1px solid #777; 
+	padding-right: 5px; 
+	color: #777; 
+	text-align: right;
+}
+
+.lineline-lines { 
+	padding-left: 20px; 
+	white-space: pre; 
+	white-space: -moz-pre; 
+	white-space: -pre; 
+	white-space: -o-pre; 
+	word-wrap: break-word; 
+} 
+
+.lineline-code  { 
+	font-family: 'Source Code Pro', monospace; 
+	font-size: 12px; 
+	color: #43f70c; 
+	line-height: 18px; 
+	width: 100%; 
+	white-space: nowrap; 
+}
+
+
+em {
+	font-weight: bold;
+	color: blue;
+}
+
+.center {
+	margin: 0 auto;
+	display: block;
+}
+
+.page-text-heading {
+	font-family: arial;
+	font-size: 18px;
+	float: left;
+}
+
+.hline {
+	width: 100%;
+	margin-top: 10px;
+	border-top: 1px dotted #8c8b8b;
+	border-bottom: 1px dotted #fff;
+	float: left;
+}
+
+.page-text {
+	padding-right: 150px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 20px;
+	color: dark-grey;
+	max-width: 800px;
+}
+</style>

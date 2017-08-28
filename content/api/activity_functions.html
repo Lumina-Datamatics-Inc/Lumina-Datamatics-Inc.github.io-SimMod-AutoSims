@@ -11,19 +11,16 @@
 		<li>showLightBox()</li>
 		<li>hideLightBox()</li>
 
-		<li>correct()</li>
+		<li>correct(vo, cc, callback)</li>
 		<li>taskComplete(label, attempts, score)</li>
 
 		<li>nextView(view)</li>
 		<li>end()</li>
 
-		<li>Audio.voDone()</li>
-		<li>Audio.play()</li>
-		<li>Audio.response()</li>
-		<li>Audio.clearPlaylist()</li>
+		<li>Audio.play(vo, cc, callback)</li>
 	</ol>
 	<br />
-	#1: The <em>configView(title, mode, id)</em> method is required for every activity view file. It accepts three parameters.
+	#1: The <em>configView(title, mode, id)</em> method is required for every activity view file. It accepts three parameters:
 	<ol>
 		<li>title: this is the activity title. It's located in the top center of the page just left of the Cengage logo.</li>
 		<li>mode: the are two page modes; full and box. These are discussed in the <i>Building Simulations Introduction</i>.</li>
@@ -45,7 +42,70 @@ const introScreen = function() {
 }	
 </textarea>
 	<br />
-	#4: The <em>showLightBox()</em> method
+	#4: The <em>showLightBox()</em> method provides you the ability to add a LightBox. From time to time you will encounter an activity
+	or a task that requires you to create a popup container for an animation or diagram which needs to be the focus, so a LightBox will be required. You do not need to add any html element for it or handle any styles.
+	<br /><br />
+	#5: The <em>showLightBox()</em> method simply hides the LightBox.
+	<br /><br />
+	#6: The <em>correct(vo, cc, callback)</em> method as discussed in the <i>Building Simulations: Activity Sequence Files</i> section
+	is used to play the correct audio response, show the closed caption text and to call whatever task sequence method you need to.
+<textarea>
+this.$core.Activity.correct(
+    ResponseData.correct.t1.vo,
+    ResponseData.correct.t1.cc,
+    () => {
+        this.t1Completed()
+    }
+)	
+</textarea>
+	<br />
+	#7: The <em>taskComplete(label, attempts, score)</em> method is used to complete a task. It requires three parameters:
+	<ol>
+		<li>label: the report label.</li>
+		<li>attempts: the number of tries it took the student.</li>
+		<li>score: the total points the student got for the task.</li>
+	</ol>
+
+	#8: The <em>nextView(view)</em> method loads another activity view file. It requires one parameter, the id of the view.
+<textarea>
+const transitionToView = function() {
+    const vm = this
+    this.$core.ContinueButton.show()
+    this.$core.ContinueButton.callback(() => {
+        vm.$core.ContinueButton.hide()
+        vm.$core.Activity.nextView('A1V2')
+    })
+}	
+</textarea>
+	<br />
+	#9: The <em>end()</em> method is called to end an activity.
+<textarea>
+const endActivity = function() {
+    this.$core.ContinueButton.show()
+    this.$core.ContinueButton.callback(() => {
+        Vue.core.ContinueButton.hide()
+        Vue.core.Activity.end()
+    })
+}
+</textarea>
+	<br />
+	#10: The <em>Audio.play(vo, cc, callback)</em> method is part of the Audio object. It takes three parameters:
+	<ol>
+		<li>vo: a single audio file that you want to be played.</li>
+		<li>cc: closed caption text, this is optional.</li>
+		<li>callback: a functions or settings that you want executed when the audio has completed.</li>
+	</ol>
+<textarea>
+this.$core.Activity.Audio.play(
+    TaskData.t13.vo,
+    TaskData.t13.cc,
+    () => {
+       this.isClickable = true
+       this.t13a1()
+    }
+)	
+</textarea>
+	<br /><br />
 </div>
 
 <script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
