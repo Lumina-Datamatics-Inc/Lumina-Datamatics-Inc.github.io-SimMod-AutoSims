@@ -322,8 +322,7 @@ export default {
     mounted() {
         // Configure the view (Activity Title, View Mode[full/box], Activity ID)
         this.$core.Activity.configView('System Recovery', 'full', 'A1')
-        // Activity Header Layout
-        this.$core.Activity.headerSingleLine(false)
+        
         // Initialize the activity view
         this.$core.Activity.init([this.introScreen])
 
@@ -369,11 +368,7 @@ The <em>configView</em> method requires 3 parameters:
 	<li>Activity ID: The naming convention for this is an uppercase "A" followed by the activity number</li>
 </ol>
 <br />
-Line 8: There will be times when an Activity Title is too long to fit on a single line in the header. So you will need to adjust this.
-We have provided a <em>$core</em> method that will change the header layout from a single line to double line layout. By default this
-value is set to true for a single line. To change the layout just call the method and set it to <em>false</em>.
-<br /><br />
-Line 10: The next thing that you must do is initialize the view. To do this you call core's <em>init</em> method. The <em>init</em> method
+Line 9: The next thing that you must do is initialize the view. To do this you call core's <em>init</em> method. The <em>init</em> method
 takes one parameter in the form of an array, its required that its passed in as an array, even though its a single parameter. What you are
 passing in is the first method in the sequence file that needs to be called. If you are working on the first activity of a module, then you
 need to call the <em>introScreen</em> method and to call any of the methods you need to prepend it with the <em>this</em> keyword. For any
@@ -381,16 +376,16 @@ other view file you would call the first task or narrative. You will learn more 
 <br /><br />
 When working on activities you will need show and enable various icons on the iconbar. You will handle these from the <em>mounted</em> option.
 <br /><br />
-Line 13: In our example we are using the <em>zoom-panel</em> so we need to show the zoom icons. To do this you call the <em>show</em> method
+Line 12: In our example we are using the <em>zoom-panel</em> so we need to show the zoom icons. To do this you call the <em>show</em> method
 of core's IconBar.Zoom object. More info about IconBar can be found in the CORE: API section.
 <br /><br />
 Another commonly used icon is for Service Information. This icon needs to be shown first and then enabled. Depending on the activity
 sometimes you will show and enable the icon at the same time, other times you might need to show the icon and that when instructed, then
 enable it.
 <br /><br />
-Line 16: To show the Service Information icon you call the <em>show</em> method, just like we did for the zoom icons.
+Line 15: To show the Service Information icon you call the <em>show</em> method, just like we did for the zoom icons.
 <br /><br />
-Line 17: Now we need to enable the icon, you do this by calling the <em>enable</em> method.
+Line 16: Now we need to enable the icon, you do this by calling the <em>enable</em> method.
 <br /><br />
 So to recap, you handle anything that the view needs here in the <em>mounted</em> option.
 <br /><br /><br />
