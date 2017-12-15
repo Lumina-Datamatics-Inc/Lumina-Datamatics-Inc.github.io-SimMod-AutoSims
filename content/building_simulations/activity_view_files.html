@@ -44,14 +44,13 @@
         <content-box :clickable="isClickable" @action="incorrect(currentTask)">
             <zoom-panel :bgimg="zoomPanelBgImg">
                 <!-- PARTS TRAY -->
-                <img id="parts-tray" src="assets/img/activities/parts_tray.png"/>
-
+                <img id="parts-tray" src="/assets/img/activities/parts_tray.png"/>
                 <!-- TASK 1: Hint & Blue Cap -->
                 <div id="t1-hint" v-hint="t1ShowHint"></div>
                 <img id="blue-ac-cap"
                      @click="t1a1()"
                      :class="{ on: blueCapOn, off: blueCapOff }"
-                     src="assets/img/activities/blue_ac_cap.png"
+                     src="/assets/img/activities/blue_ac_cap.png"
                 />
 
                 <!-- TASK 2: Hint & Red Cap -->
@@ -59,7 +58,7 @@
                 <img id="red-ac-cap"
                      @click="t2a1()"
                      :class="{ on: redCapOn, off: redCapOff }"
-                     src="assets/img/activities/red_ac_cap.png"
+                     src="/assets/img/activities/red_ac_cap.png"
                 />
             </zoom-panel>
         </content-box>
@@ -677,7 +676,7 @@ methods() {
     <br/><br/>
 </div>
 
-<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-linedtextarea.js"></script>
 <script>
     $('textarea').lineLine();
 </script>
