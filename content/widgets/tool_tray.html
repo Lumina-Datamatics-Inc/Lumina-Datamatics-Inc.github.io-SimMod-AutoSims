@@ -1,98 +1,158 @@
 <div class="page-text">
-The <em>Tooltray</em>
-<br />
-<textarea>
-....
-
-....
+    <br/>
+    <em>Props</em><br/>
+    <textarea>
+    - data // special tooltray data object, see below
+    - hint // boolean, enables or disables hint
 </textarea>
-<br />
+    <br/>
+    <em>Methods</em><br/>
+    <textarea>
+    - initialize() // init tooltray
+    - toggleDraggables(val) // disable or enable all draggable elements in tooltray
+    - close()
+    - moveDown()
+    - moveUp()
+    - clickOnItem(item) // trigger action click on item (item is record from tooltray-data not an DOM element)
+    - wrongPosition(code)
+    - wrongElement() // emits wrongElement action
+    - reformatCode(code)
+    - calcInDestination()
+    - getElementCenter(coord)
+    - getElementCoords(target) // item dom element as target
+    </textarea>
+    <br/>
+    <em>Actions</em><br/>
+    <textarea>
+    - completed // an action when user click or drag&drop right item in right position
+    - showHint // ...
+    - wrongElement // an action when user click or drag&drop wrong element or right element to wrong position
+    </textarea>
+    <br/>
+    <em>how to make up property "data"</em><br/>
+    <textarea>
+    {
+    "id": 1,
+    "click": true // defines if user can click on item or only drag&drop
+    "items": [ // array of item objects displayed in tooltray
+            {
+            "id": 1,
+            "image": "/assets/img/widgets/tool-tray/vacuum_gauge_toolbox_small.png", // img path must be absolute
+            "exact": true, // boolean - see "hotSpotId" or "code"
+            "hotSpotId": "t1-hint", // string - destination id to throw item in - only if exact = true
+            "code": "vacuum-port", // string - if "hotSpotId" is not set this will be used - only if exact = true
+            "correct": true // boolean - defines if this item is correct one
+            }
+        ]
+    }
+    </textarea>
+    <em>Use example</em><br/>
+    <textarea>
+    // - First you have to add tool-tray widget to your ".vue" file.
+    // - insert widget inside you'r template tags
+    <tool-tray
+            :data="toolTrayData"
+            :hint="xShowHint"
+            @wrongElement="incorrect(currentTask)">
+    </tool-tray>
+    // - import widget and previous declared tooltray data from json
+
+    import ToolTray from '../../widgets/ToolTray'
+    import ToolTrayData from '/data/xx/xx-tooltray-data.json
+
+    // - declare your variables in component data() function
+    data() {
+        return {
+        xShowHint: false,
+        toolTrayData: ToolTrayData.t1
+        }
+    }
+    </textarea>
+    <pre>For multiple tasks in one activity you can set :data param as a function, hints can be separated by or operator</pre>
+    <br/>
 </div>
 
 <script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
 <script>
-$('textarea').lineLine();
+    $('textarea').lineLine();
 </script>
 
 <style scoped="scoped">
-.dev-note {
-	max-height: 200px; 
-	width: 780px;
-	padding: 10px;
-	background-color: #eff0f2; 
-	border: 3px solid #ccc;
-}
+    .dev-note {
+        max-height: 200px;
+        width: 780px;
+        padding: 10px;
+        background-color: #eff0f2;
+        border: 3px solid #ccc;
+    }
 
-.lineline { 
-	max-height: 600px; 
-	width: 800px; 
-	margin: 10px auto 0; 
-	border: 3px solid #ccc;
-	background-color: black;
-	padding: 0px; 
-	overflow: auto; 
-	text-align: left; 
-}
+    .lineline {
+        max-height: 600px;
+        width: 800px;
+        margin: 10px auto 0;
+        border: 3px solid #ccc;
+        background-color: black;
+        padding: 0px;
+        overflow: auto;
+        text-align: left;
+    }
 
-.lineline-numbers { 
-	width: 20px; 
-	border-right: 1px solid #777; 
-	padding-right: 5px; 
-	color: #777; 
-	text-align: right;
-}
+    .lineline-numbers {
+        width: 20px;
+        border-right: 1px solid #777;
+        padding-right: 5px;
+        color: #777;
+        text-align: right;
+    }
 
-.lineline-lines { 
-	padding-left: 20px; 
-	white-space: pre; 
-	white-space: -moz-pre; 
-	white-space: -pre; 
-	white-space: -o-pre; 
-	word-wrap: break-word; 
-} 
+    .lineline-lines {
+        padding-left: 20px;
+        white-space: pre;
+        white-space: -moz-pre;
+        white-space: -pre;
+        white-space: -o-pre;
+        word-wrap: break-word;
+    }
 
-.lineline-code  { 
-	font-family: 'Source Code Pro', monospace; 
-	font-size: 12px; 
-	color: #43f70c; 
-	line-height: 18px; 
-	width: 100%; 
-	white-space: nowrap; 
-}
+    .lineline-code {
+        font-family: 'Source Code Pro', monospace;
+        font-size: 12px;
+        color: #43f70c;
+        line-height: 18px;
+        width: 100%;
+        white-space: nowrap;
+    }
 
+    em {
+        font-weight: bold;
+        color: blue;
+    }
 
+    .center {
+        margin: 0 auto;
+        display: block;
+    }
 
+    .page-text-heading {
+        font-family: arial;
+        font-size: 18px;
+        float: left;
+    }
 
-em {
-	font-weight: bold;
-	color: blue;
-}
+    .hline {
+        width: 100%;
+        margin-top: 10px;
+        border-top: 1px dotted #8c8b8b;
+        border-bottom: 1px dotted #fff;
+        float: left;
+    }
 
-.center {
-	margin: 0 auto;
-	display: block;
-}
-
-.page-text-heading {
-	font-family: arial;
-	font-size: 18px;
-	float: left;
-}
-
-.hline {
-	width: 100%;
-	margin-top: 10px;
-	border-top: 1px dotted #8c8b8b;
-	border-bottom: 1px dotted #fff;
-	float: left;
-}
-
-.page-text {
-	padding-right: 150px;
-	font-family: arial;
-	font-size: 14px;
-	line-height: 20px;
-	color: dark-grey;
-	max-width: 800px;
-}
+    .page-text {
+        padding-right: 150px;
+        font-family: arial;
+        font-size: 14px;
+        line-height: 20px;
+        color: dark-grey;
+        max-width: 800px;
+    }
 </style>
