@@ -45,8 +45,8 @@ that runs outside of the Vue instance, so to reference those methods, Vue must b
 <br />
 The next section of code is required and is also provided in the boilerplate.
 <textarea>
-const incorrectResponse = function() {
-    this.$core.Activity.Audio.play(
+const incorrectResponse = function () {
+    this.$core.Activity.Audio.playIncorrectAudio(
         ResponseData.incorrect.vo,
         ResponseData.incorrect.cc
     )
@@ -342,7 +342,7 @@ This example is only showing a partial list that is not reflective of all the me
 <br /><br />
 </div>
 
-<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-linedtextarea.js"></script>
 <script>
 $('textarea').lineLine();
 </script>

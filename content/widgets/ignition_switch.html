@@ -1,147 +1,173 @@
 <div class="page-text">
-The <em>IgnitionSwitch</em> widget is a base widget, we have tried to provide the most common functionality that we could. There will be cases where you will need different functionality, so we have made the code for this widget accessible so that you can copy it and makes changes as you need to.
-<br /><br />
-I tried to make this widget as easy as possible to use by encapsulating the bulk of its functionality within the widget.
-<br />
-<textarea>
-<template>
-    ....
+    The <em>IgnitionSwitch</em> widget is a base widget, we have tried to provide the most common functionality that we
+    could. There will be cases where you will need different functionality, so we have made the code for this widget
+    accessible so that you can copy it and makes changes as you need to.
+    <br/>
+    <br/>
+    <h2>Props</h2>
+    <textarea>
+    - left // margin left
+    - top  // margin top
+    - right // margin right
+    - bottom // margin bottom
+    - mode // starting key position
+    - nextMode // Hash { val: mode, callback: function, additionalCallback: function }
+    - attempts // currentAttempts
+</textarea>
+    <h2> Available modes:</h2>
+    <textarea>
+    - lock
+    - acc
+    - on
+    - start
+    </textarea>
+    <h2>Methods:</h2>
+    <textarea>
+    // Val true mutes engine sound, false unmutes
+    - muteVolume(val)
+
+    // Plays engine sound
+    - playOnSound()
+
+    // Rotates key to selected mode
+    - turnKey(mode)
+
+    // Switch bahavior when key turned to correct mode
+    - setMode(mode)
+
+    // Enables click and drag events
+    - enableSwitch()
+
+    // Disables click and drag events, hides hints
+    - disableSwitch()
+
+    // Enables switch and sets correct mode that needs to be chosen
+    // callback is a function fired up after turning key to correct mode
+    - setNextMode(mode, callback)
+
+    // Turns the key and handles switch behavior
+    // if correct, fires up callback and disables switch
+    // else fires up incorrect event from .vue
+    - switchKey(mode)
+
+    // Shows hint based on mode that needs to be chosen
+    - setHint()
+     </textarea>
+
+    <h2>How to use (example)</h2>
+    <h3>A1V2.vue</h3>
+    <span>- Add tool to template in `conent-box`</span>
+    <textarea>
     <ignition-switch
-        top="60px"
-        right="50px"
-        left=""
-        bottom=""
-        @lock="incorrect('t3')"
-        @acc="incorrect('t3')"
-        @on="t3a1()"
-        @start="t3a1()"
-        :lockHint="false"
-        :accHint="false"
-        :onHint="t3ShowHint"
-    >
+            ref="ignitionSwitch"
+            top="60px"
+            left="30px"
+            mode='on'
+            :nextMode="ignitionNextMode"
+            :attemts="currentAttempts"
+            :isClickable="isClickable"
+            @incorrect="incorrect()">
     </ignition-switch>
-    ....
-</template>
-</textarea>
-<br />
-Lines 4 - 7: You set the position of the <em>ignition-switch</em> by setting the values of its four css position properties. You only need to set the ones that you need. Internally its set to an absolute position.
-<br /><br />
-The <em>ignition-switch</em> has four positions Lock (Loc), Accessory (Acc), On and Start.
-<br /><br />
-Lines 8 - 11: are events that are fired when you rotate the switch to each position. So you can call whatever sequence task action method
-you need to for what you are working on.
-<br /><br />
-Lines 12 - 14: are the hints for the switch. You need to set the ones your not using to false and use the task ShowHint property for
-task that the hint is for.
-<br /><br />
-The difficult part of any web based widget is having a event perform something different for various tasks. The best approach to modify 
-this would be to pass in an array of task methods and hints and have them fire based on the current task.
-<br /><br />
-The next step is to <em>import</em> the widget and then add it to the <em>components</em> option.
-<br />
-<textarea>
-<script>
-....
-import IgnitionSwitch from '../../widgets/ignition-switch/IgnitionSwitch'
-....
-export default {
-    ....
-    components: {
-        ....
-        IgnitionSwitch,
-        ....
-    }
-    ....
-}
-</script>
-</textarea>
-<br /><br />
+    </textarea>
+    <ol>
+        <li>`isClickable` is necessary to correctly display errors when switch is locked</li>
+        <li>`@incorrect` is an event fired when key is turned to wrong position</li>
+        <li>Showing hints depends on currentAttempts passed to switch</li>
+        <li>import widget in script part</li>
+        <li> import IgnitionSwitch from '../../widgets/ignition-switch/IgnitionSwitch'`</li>
+    </ol>
+
+    <h3>a1v2-seq.js</h3>
+    <p>
+        - Enables switch and sets correct mode that needs to be chosen,
+        callback is a function fired up after turning key to correct mode,
+        additionalCallback is optional, when you want to fire a function during engine sound <em>
+        `this.ignitionNextMode = { val: 'lock', callback: this.t3a2, additionalCallback: this.t3ign }`</em>
+    </p>
+
 </div>
 
-<script type="text/javascript" src="assets/js/jquery-linedtextarea.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-linedtextarea.js"></script>
 <script>
-$('textarea').lineLine();
+    $('textarea').lineLine();
 </script>
 
 <style scoped="scoped">
-.dev-note {
-	max-height: 200px; 
-	width: 780px;
-	padding: 10px;
-	background-color: #eff0f2; 
-	border: 3px solid #ccc;
-}
+    .dev-note {
+        max-height: 200px;
+        width: 780px;
+        padding: 10px;
+        background-color: #eff0f2;
+        border: 3px solid #ccc;
+    }
 
-.lineline { 
-	max-height: 600px; 
-	width: 800px; 
-	margin: 10px auto 0; 
-	border: 3px solid #ccc;
-	background-color: black;
-	padding: 0px; 
-	overflow: auto; 
-	text-align: left; 
-}
+    .lineline {
+        max-height: 600px;
+        width: 800px;
+        margin: 10px auto 0;
+        border: 3px solid #ccc;
+        background-color: black;
+        padding: 0px;
+        overflow: auto;
+        text-align: left;
+    }
 
-.lineline-numbers { 
-	width: 20px; 
-	border-right: 1px solid #777; 
-	padding-right: 5px; 
-	color: #777; 
-	text-align: right;
-}
+    .lineline-numbers {
+        width: 20px;
+        border-right: 1px solid #777;
+        padding-right: 5px;
+        color: #777;
+        text-align: right;
+    }
 
-.lineline-lines { 
-	padding-left: 20px; 
-	white-space: pre; 
-	white-space: -moz-pre; 
-	white-space: -pre; 
-	white-space: -o-pre; 
-	word-wrap: break-word; 
-} 
+    .lineline-lines {
+        padding-left: 20px;
+        white-space: pre;
+        white-space: -moz-pre;
+        white-space: -pre;
+        white-space: -o-pre;
+        word-wrap: break-word;
+    }
 
-.lineline-code  { 
-	font-family: 'Source Code Pro', monospace; 
-	font-size: 12px; 
-	color: #43f70c; 
-	line-height: 18px; 
-	width: 100%; 
-	white-space: nowrap; 
-}
+    .lineline-code {
+        font-family: 'Source Code Pro', monospace;
+        font-size: 12px;
+        color: #43f70c;
+        line-height: 18px;
+        width: 100%;
+        white-space: nowrap;
+    }
 
+    em {
+        font-weight: bold;
+        color: blue;
+    }
 
+    .center {
+        margin: 0 auto;
+        display: block;
+    }
 
+    .page-text-heading {
+        font-family: arial;
+        font-size: 18px;
+        float: left;
+    }
 
-em {
-	font-weight: bold;
-	color: blue;
-}
+    .hline {
+        width: 100%;
+        margin-top: 10px;
+        border-top: 1px dotted #8c8b8b;
+        border-bottom: 1px dotted #fff;
+        float: left;
+    }
 
-.center {
-	margin: 0 auto;
-	display: block;
-}
-
-.page-text-heading {
-	font-family: arial;
-	font-size: 18px;
-	float: left;
-}
-
-.hline {
-	width: 100%;
-	margin-top: 10px;
-	border-top: 1px dotted #8c8b8b;
-	border-bottom: 1px dotted #fff;
-	float: left;
-}
-
-.page-text {
-	padding-right: 150px;
-	font-family: arial;
-	font-size: 14px;
-	line-height: 20px;
-	color: dark-grey;
-	max-width: 800px;
-}
+    .page-text {
+        padding-right: 150px;
+        font-family: arial;
+        font-size: 14px;
+        line-height: 20px;
+        color: dark-grey;
+        max-width: 800px;
+    }
 </style>
