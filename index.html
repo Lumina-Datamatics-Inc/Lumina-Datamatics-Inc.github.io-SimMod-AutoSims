@@ -173,54 +173,39 @@
 
     <script src="assets/js/jquery-3.2.1.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Keep track of loaded page
-            let loadedPage = ''
-
-            window.onpopstate = function (e) {
-                e.preventDefault();
-                loadPage(e.state);
-            }
-
-            function handleLinks(selector = '.nav-list > .nav-list-item > a') {
-                // Page Loader
-                $(selector).on('click', function (e) {
-                    // Prevent default action
-                    e.preventDefault()
-
-                    // Get values from elements
-                    let page = $(this).attr('href')
-                    let section = $(this).attr('data-section')
-                    let title = $(this).text()
-                    let state = {page, section, title}
-                    window.history.pushState(state, '', `/${page}`)
-                    loadPage(state)
-                })
-            }
-
-            handleLinks();
-
-            function loadPage(state) {
-                $('#doc-page-container').load('/content/' + state.page + '.html')
-                loadedPage = state.page
-                // Remove current active class to nav list item
-                $(document).find('.nav-list > .nav-list-item > a.active').removeClass('active')
-                $(document).find(`a[href="${loadedPage}"]`).addClass('active')
-                // Update Page header section and title
-                $('.page-section').text(state.section)
-                $('.page-title').text(state.title)
-                handleLinks('#doc-page-container > .router-link');
-            }
+            var loadedPage = ''
 
             // Load default page
             if (loadedPage === '') {
-                loadPage({
-                    page: 'getting_started/introduction',
-                    title: 'Introduction',
-                    section: 'Getting Started'
-                });
+                $('#doc-page-container').load('content/getting_started/introduction.html')
             }
 
+            // Page Loader
+            $('.nav-list > .nav-list-item > a').on('click', function(e) {
+                // Prevent default action
+                e.preventDefault()
+
+                // Get values from elements
+                var page = $(this).attr('href')
+                var section = $(this).attr('data-section')
+                var title = $(this).text()
+
+                // Load the page
+                $('#doc-page-container').load('content/' + page + '.html')
+
+                // Set the loaded page for use with active class on nav
+                loadedPage = page
+
+                // Remove current active class to nav list item
+                $(document).find('.nav-list > .nav-list-item > a.active').removeClass('active')
+                $(this).addClass('active')
+
+                // Update Page header section and title
+                $('.page-section').text(section)
+                $('.page-title').text(title)
+            })
         })
     </script>
     <script src="assets/js/scripts.js"></script>
